@@ -1,1 +1,1 @@
-# Bbusiness-metric-exporter
+# Business-metric-exporter
