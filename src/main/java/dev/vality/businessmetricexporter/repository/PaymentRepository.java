@@ -1,6 +1,7 @@
 package dev.vality.businessmetricexporter.repository;
 
 import dev.vality.businessmetricexporter.entity.PaymentDto;
+import dev.vality.businessmetricexporter.entity.PaymentEntity;
 import dev.vality.businessmetricexporter.entity.PaymentPk;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Repository
 @SuppressWarnings("LineLength")
-public interface PaymentRepository extends JpaRepository<PaymentRepository, PaymentPk>, JpaSpecificationExecutor<PaymentRepository> {
+public interface PaymentRepository extends JpaRepository<PaymentEntity, PaymentPk> {
 
     @Query(value = """
             with p4 as (with p3 as (with p2 as (with p1 as (select p.invoice_id,

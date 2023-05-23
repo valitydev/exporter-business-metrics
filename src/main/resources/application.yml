@@ -42,15 +42,9 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://changeit:5432/dw
-    username: changeit
-    password: changeit
-  flyway:
-    table: schema_version
-    schemas: org_manager
-    url: jdbc:postgresql://changeit:5432/dw
-    user: changeit
-    password: changeit
+    url: jdbc:postgresql://localhost:5432/newway
+    username: postgres
+    password: postgres
 
 hibernate:
   physical_naming_strategy: dev.vality.businessmetricexporter.entity.naming.SnakeCaseNamingStrategy
