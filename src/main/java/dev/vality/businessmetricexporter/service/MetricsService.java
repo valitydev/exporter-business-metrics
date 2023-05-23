@@ -20,10 +20,6 @@ public class MetricsService {
     }
 
     private void registerPaymentsMetrics() {
-        var multiGauge = MultiGauge.builder(Metric.PAYMENTS_COUNT.getName())
-                .description(Metric.PAYMENTS_COUNT.getDescription())
-                .baseUnit(Metric.PAYMENTS_COUNT.getUnit())
-                .register(meterRegistry);
-        paymentService.registerMetrics(multiGauge);
+        paymentService.registerMetrics(meterRegistry);
     }
 }
