@@ -18,7 +18,7 @@ public class PaymentsWithFailedStatusByCountryGaugeMetrics implements PaymentsGa
     public Map<Tags, Double> aggregate(List<PaymentDto> values) {
         return values.stream()
                 .filter(paymentDto -> PaymentStatus.isFailedStatus(paymentDto.getStatus()))
-                .collect(Collectors.groupingBy(PaymentDto::getCountry, Collectors.counting()))
+                .collect(Collectors.groupingBy(PaymentDto::getIssuerCountry, Collectors.counting()))
                 .entrySet().stream()
                 .collect(Collectors.toMap(this::getTags, e -> e.getValue().doubleValue()));
     }

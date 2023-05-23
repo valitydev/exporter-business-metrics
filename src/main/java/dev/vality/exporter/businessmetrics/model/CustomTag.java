@@ -10,7 +10,7 @@ public class CustomTag {
     public static final String TERMINAL_TAG = "terminal";
     public static final String STATUS_TAG = "status";
     public static final String CURRENCY_TAG = "currency";
-    public static final String COUNTRY_TAG = "country";
+    public static final String COUNTRY_TAG = "issuer_country";
 
     public static Tag provider(String providerName) {
         return Tag.of(PROVIDER_TAG, providerName);
