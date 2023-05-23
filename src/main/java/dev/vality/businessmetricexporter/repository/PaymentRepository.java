@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-@SuppressWarnings("LineLength")
 public interface PaymentRepository extends JpaRepository<PaymentEntity, PaymentPk> {
 
     @Query(name = "get_payment_dto_list", nativeQuery = true)

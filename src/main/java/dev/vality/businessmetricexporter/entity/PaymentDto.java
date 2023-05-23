@@ -67,6 +67,7 @@ import javax.persistence.*;
                         @ColumnResult(name = "terminalId", type = String.class),
                         @ColumnResult(name = "providerName", type = String.class),
                         @ColumnResult(name = "terminalName", type = String.class)}))
+@SuppressWarnings("LineLength")
 public class PaymentDto {
 
     @Id
