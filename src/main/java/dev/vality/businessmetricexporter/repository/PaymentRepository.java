@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@SuppressWarnings("LineLength")
 public interface PaymentRepository extends JpaRepository<PaymentRepository, PaymentPk>, JpaSpecificationExecutor<PaymentRepository> {
 
     @Query(value = "with currppt as (with currp as ( " +
