@@ -50,7 +50,7 @@ hibernate:
   physical_naming_strategy: dev.vality.businessmetricexporter.entity.naming.SnakeCaseNamingStrategy
 
 schedule:
-  cron: '*/5 * * * * *' #every 30 seconds
+  cron: '*/30 * * * * *' #every 30 seconds
 
 interval:
   time: 30 #seconds
