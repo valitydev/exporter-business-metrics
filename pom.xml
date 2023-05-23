@@ -9,11 +9,11 @@
         <version>2.1.4</version>
     </parent>
 
-    <artifactId>business-metric-exporter</artifactId>
+    <artifactId>exporter-business-metrics</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>business-metric-exporter</name>
+    <name>exporter-business-metrics</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

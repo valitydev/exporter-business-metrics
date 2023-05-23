@@ -1,1 +1,4 @@
-# Business-metric-exporter
+# exporter-business-metrics
+
+daway -> app -> prometheus
+
