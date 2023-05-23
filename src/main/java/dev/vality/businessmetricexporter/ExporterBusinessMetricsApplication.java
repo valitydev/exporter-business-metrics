@@ -8,10 +8,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ServletComponentScan
 @SpringBootApplication
 @EnableScheduling
-public class BusinessMetricExporterApplication extends SpringApplication {
+public class ExporterBusinessMetricsApplication extends SpringApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BusinessMetricExporterApplication.class, args);
+        SpringApplication.run(ExporterBusinessMetricsApplication.class, args);
     }
 
 }
