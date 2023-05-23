@@ -34,6 +34,26 @@ spring:
   output:
     ansi:
       enabled: always
+  jpa:
+    database: postgresql
+    properties:
+      hibernate:
+        default_schema: dw
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://changeit:5432/dw
+    username: changeit
+    password: changeit
+  flyway:
+    table: schema_version
+    schemas: org_manager
+    url: jdbc:postgresql://changeit:5432/dw
+    user: changeit
+    password: changeit
+
+hibernate:
+  physical_naming_strategy: dev.vality.businessmetricexporter.entity.naming.SnakeCaseNamingStrategy
 
 schedule:
   cron: '*/30 * * * * *' #every 30 seconds
