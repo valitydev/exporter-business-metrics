@@ -1,208 +1,8 @@
-create type adjustment_cash_flow_type as enum ('new_cash_flow', 'old_cash_flow_inverse');
-
-alter type adjustment_cash_flow_type owner to postgres;
-
-create type adjustment_status as enum ('pending', 'captured', 'cancelled', 'processed');
-
-alter type adjustment_status owner to postgres;
-
-create type blocking as enum ('unblocked', 'blocked');
-
-alter type blocking owner to postgres;
-
-create type cash_flow_account as enum ('merchant', 'provider', 'system', 'external', 'wallet');
-
-alter type cash_flow_account owner to postgres;
-
-create type challenge_resolution as enum ('approved', 'denied');
-
-alter type challenge_resolution owner to postgres;
-
-create type challenge_status as enum ('pending', 'cancelled', 'completed', 'failed');
-
-alter type challenge_status owner to postgres;
-
-create type chargeback_category as enum ('fraud', 'dispute', 'authorisation', 'processing_error');
-
-alter type chargeback_category owner to postgres;
-
-create type chargeback_stage as enum ('chargeback', 'pre_arbitration', 'arbitration');
-
-alter type chargeback_stage owner to postgres;
-
-create type chargeback_status as enum ('pending', 'accepted', 'rejected', 'cancelled');
-
-alter type chargeback_status owner to postgres;
-
-create type contract_status as enum ('active', 'terminated', 'expired');
-
-alter type contract_status owner to postgres;
-
-create type contractor_type as enum ('registered_user', 'legal_entity', 'private_entity');
-
-alter type contractor_type owner to postgres;
-
-create type deposit_adjustment_status as enum ('pending', 'succeeded');
-
-alter type deposit_adjustment_status owner to postgres;
-
-create type deposit_revert_status as enum ('pending', 'succeeded', 'failed');
-
-alter type deposit_revert_status owner to postgres;
-
-create type deposit_status as enum ('pending', 'succeeded', 'failed');
-
-alter type deposit_status owner to postgres;
-
-create type deposit_transfer_status as enum ('created', 'prepared', 'committed', 'cancelled');
-
-alter type deposit_transfer_status owner to postgres;
-
-create type destination_resource_type as enum ('bank_card', 'crypto_wallet', 'digital_wallet', 'generic');
-
-alter type destination_resource_type owner to postgres;
-
-create type destination_status as enum ('authorized', 'unauthorized');
-
-alter type destination_status owner to postgres;
-
-create type fistful_cash_flow_change_type as enum ('withdrawal', 'deposit', 'deposit_revert', 'deposit_adjustment');
-
-alter type fistful_cash_flow_change_type owner to postgres;
-
-create type invoice_status as enum ('unpaid', 'paid', 'cancelled', 'fulfilled');
-
-alter type invoice_status owner to postgres;
-
-create type legal_entity as enum ('russian_legal_entity', 'international_legal_entity');
-
-alter type legal_entity owner to postgres;
-
-create type mobile_operator_type as enum ('mts', 'beeline', 'megafone', 'tele2', 'yota');
-
-alter type mobile_operator_type owner to postgres;
-
-create type payer_type as enum ('payment_resource', 'customer', 'recurrent');
-
-alter type payer_type owner to postgres;
-
-create type payment_change_type as enum ('payment', 'refund', 'adjustment', 'payout', 'chargeback');
-
-alter type payment_change_type owner to postgres;
-
-create type payment_flow_type as enum ('instant', 'hold');
-
-alter type payment_flow_type owner to postgres;
-
-create type payment_method_type as enum ('bank_card', 'payment_terminal', 'digital_wallet', 'tokenized_bank_card', 'empty_cvv_bank_card', 'crypto_currency', 'mobile', 'generic');
-
-alter type payment_method_type owner to postgres;
-
-create type payment_status as enum ('pending', 'processed', 'captured', 'cancelled', 'refunded', 'failed', 'charged_back');
-
-alter type payment_status owner to postgres;
-
-create type payment_tool_type as enum ('bank_card', 'payment_terminal', 'digital_wallet', 'crypto_currency', 'mobile_commerce', 'crypto_currency_deprecated');
-
-alter type payment_tool_type owner to postgres;
-
-create type payout_account_type as enum ('russian_payout_account', 'international_payout_account');
-
-alter type payout_account_type owner to postgres;
-
-create type payout_paid_status_details as enum ('card_details', 'account_details');
-
-alter type payout_paid_status_details owner to postgres;
-
-create type payout_status as enum ('unpaid', 'paid', 'cancelled', 'confirmed');
-
-alter type payout_status owner to postgres;
-
-create type payout_tool_info as enum ('russian_bank_account', 'international_bank_account', 'wallet_info', 'payment_institution_account');
-
-alter type payout_tool_info owner to postgres;
-
-create type payout_type as enum ('bank_card', 'bank_account', 'wallet');
-
-alter type payout_type owner to postgres;
-
-create type private_entity as enum ('russian_private_entity');
-
-alter type private_entity owner to postgres;
-
-create type recurrent_payment_tool_status as enum ('created', 'acquired', 'abandoned', 'failed');
-
-alter type recurrent_payment_tool_status owner to postgres;
-
-create type refund_status as enum ('pending', 'succeeded', 'failed');
-
-alter type refund_status owner to postgres;
-
-create type representative_document as enum ('articles_of_association', 'power_of_attorney', 'expired');
-
-alter type representative_document owner to postgres;
-
-create type risk_score as enum ('low', 'high', 'fatal');
-
-alter type risk_score owner to postgres;
-
-create type source_status as enum ('authorized', 'unauthorized');
-
-alter type source_status owner to postgres;
-
-create type suspension as enum ('active', 'suspended');
-
-alter type suspension owner to postgres;
-
-create type user_type as enum ('internal_user', 'external_user', 'service_user');
-
-alter type user_type owner to postgres;
-
-create type withdrawal_session_status as enum ('active', 'success', 'failed');
-
-alter type withdrawal_session_status owner to postgres;
-
-create type withdrawal_status as enum ('pending', 'succeeded', 'failed');
-
-alter type withdrawal_status owner to postgres;
-
-create type withdrawal_transfer_status as enum ('created', 'prepared', 'committed', 'cancelled');
-
-alter type withdrawal_transfer_status owner to postgres;
-
-create type limit_config_time_range_type as enum ('calendar', 'interval');
-
-alter type limit_config_time_range_type owner to postgres;
-
-create type limit_config_time_range_type_calendar as enum ('year', 'month', 'week', 'day');
-
-alter type limit_config_time_range_type_calendar owner to postgres;
-
-create type limit_config_limit_context_type as enum ('payment_processing', 'withdrawal_processing');
-
-alter type limit_config_limit_context_type owner to postgres;
-
-create type limit_config_limit_type_turnover_metric as enum ('number', 'amount');
-
-alter type limit_config_limit_type_turnover_metric owner to postgres;
-
-create type limit_config_limit_scope as enum ('multi', 'single');
-
-alter type limit_config_limit_scope owner to postgres;
-
-create type limit_config_limit_scope_type as enum ('party', 'shop', 'wallet', 'identity', 'payment_tool', 'provider', 'terminal', 'payer_contact_email');
-
-alter type limit_config_limit_scope_type owner to postgres;
-
-create type limit_config_operation_limit_behaviour as enum ('subtraction', 'addition');
-
-alter type limit_config_operation_limit_behaviour owner to postgres;
-
-create table if not exists flyway_schema_history
+create table if not exists dw.flyway_schema_history
 (
     installed_rank integer                 not null
-    constraint flyway_schema_history_pk
-    primary key,
+        constraint flyway_schema_history_pk
+            primary key,
     version        varchar(50),
     description    varchar(200)            not null,
     type           varchar(20)             not null,
@@ -212,18 +12,18 @@ create table if not exists flyway_schema_history
     installed_on   timestamp default now() not null,
     execution_time integer                 not null,
     success        boolean                 not null
-    );
+);
 
-alter table flyway_schema_history
+alter table dw.flyway_schema_history
     owner to postgres;
 
 create index if not exists flyway_schema_history_s_idx
-    on flyway_schema_history (success);
+    on dw.flyway_schema_history (success);
 
-create table if not exists adjustment
+create table if not exists dw.adjustment
 (
     id                           bigserial
-    primary key,
+        primary key,
     event_created_at             timestamp                                      not null,
     domain_revision              bigint                                         not null,
     adjustment_id                varchar                                        not null,
@@ -248,31 +48,31 @@ create table if not exists adjustment
     external_income_amount_diff  bigint    default 0,
     external_outcome_amount_diff bigint    default 0,
     constraint adjustment_uniq
-    unique (invoice_id, sequence_id, change_id)
-    );
+        unique (invoice_id, sequence_id, change_id)
+);
 
-alter table adjustment
+alter table dw.adjustment
     owner to postgres;
 
 create index if not exists adjustment_created_at
-    on adjustment (created_at);
+    on dw.adjustment (created_at);
 
 create index if not exists adjustment_event_created_at
-    on adjustment (event_created_at);
+    on dw.adjustment (event_created_at);
 
 create index if not exists adjustment_invoice_id
-    on adjustment (invoice_id);
+    on dw.adjustment (invoice_id);
 
 create index if not exists adjustment_party_id
-    on adjustment (party_id);
+    on dw.adjustment (party_id);
 
 create index if not exists adjustment_status
-    on adjustment (status);
+    on dw.adjustment (status);
 
-create table if not exists cash_flow_link
+create table if not exists dw.cash_flow_link
 (
     id               bigserial
-    primary key,
+        primary key,
     event_created_at timestamp                                      not null,
     invoice_id       varchar                                        not null,
     payment_id       varchar                                        not null,
@@ -281,16 +81,16 @@ create table if not exists cash_flow_link
     wtime            timestamp default timezone('utc'::text, now()) not null,
     current          boolean   default false                        not null,
     constraint cash_flow_link_uniq
-    unique (invoice_id, payment_id, sequence_id, change_id)
-    );
+        unique (invoice_id, payment_id, sequence_id, change_id)
+);
 
-alter table cash_flow_link
+alter table dw.cash_flow_link
     owner to postgres;
 
-create table if not exists cash_flow
+create table if not exists dw.cash_flow
 (
     id                             bigserial
-    primary key,
+        primary key,
     obj_id                         bigint                 not null,
     obj_type                       dw.payment_change_type not null,
     adj_flow_type                  dw.adjustment_cash_flow_type,
@@ -305,16 +105,16 @@ create table if not exists cash_flow
     details                        varchar
 );
 
-alter table cash_flow
+alter table dw.cash_flow
     owner to postgres;
 
 create index if not exists cash_flow_idx
-    on cash_flow (obj_id, obj_type);
+    on dw.cash_flow (obj_id, obj_type);
 
-create table if not exists calendar
+create table if not exists dw.calendar
 (
     id                bigserial
-    primary key,
+        primary key,
     version_id        bigint                                         not null,
     calendar_ref_id   integer                                        not null,
     name              varchar                                        not null,
@@ -324,21 +124,21 @@ create table if not exists calendar
     first_day_of_week integer,
     wtime             timestamp default timezone('utc'::text, now()) not null,
     current           boolean   default true                         not null
-    );
+);
 
-alter table calendar
+alter table dw.calendar
     owner to postgres;
 
 create index if not exists calendar_idx
-    on calendar (calendar_ref_id);
+    on dw.calendar (calendar_ref_id);
 
 create index if not exists calendar_version_id
-    on calendar (version_id);
+    on dw.calendar (version_id);
 
-create table if not exists category
+create table if not exists dw.category
 (
     id              bigserial
-    primary key,
+        primary key,
     version_id      bigint                                         not null,
     category_ref_id integer                                        not null,
     name            varchar                                        not null,
@@ -346,21 +146,21 @@ create table if not exists category
     type            varchar,
     wtime           timestamp default timezone('utc'::text, now()) not null,
     current         boolean   default true                         not null
-    );
+);
 
-alter table category
+alter table dw.category
     owner to postgres;
 
 create index if not exists category_idx
-    on category (category_ref_id);
+    on dw.category (category_ref_id);
 
 create index if not exists category_version_id
-    on category (version_id);
+    on dw.category (version_id);
 
-create table if not exists challenge
+create table if not exists dw.challenge
 (
     id                    bigserial
-    primary key,
+        primary key,
     event_created_at      timestamp                                      not null,
     event_occured_at      timestamp                                      not null,
     sequence_id           integer                                        not null,
@@ -374,25 +174,25 @@ create table if not exists challenge
     current               boolean   default true                         not null,
     proofs_json           varchar,
     constraint challenge_uniq
-    unique (challenge_id, identity_id, sequence_id)
-    );
+        unique (challenge_id, identity_id, sequence_id)
+);
 
-alter table challenge
+alter table dw.challenge
     owner to postgres;
 
 create index if not exists challenge_event_created_at_idx
-    on challenge (event_created_at);
+    on dw.challenge (event_created_at);
 
 create index if not exists challenge_event_occured_at_idx
-    on challenge (event_occured_at);
+    on dw.challenge (event_occured_at);
 
 create index if not exists challenge_id_idx
-    on challenge (challenge_id);
+    on dw.challenge (challenge_id);
 
-create table if not exists chargeback
+create table if not exists dw.chargeback
 (
     id                 bigserial
-    primary key,
+        primary key,
     sequence_id        bigint                                         not null,
     change_id          integer                                        not null,
     domain_revision    bigint                                         not null,
@@ -417,31 +217,31 @@ create table if not exists chargeback
     context            bytea,
     wtime              timestamp default timezone('utc'::text, now()) not null,
     constraint chargeback_uniq
-    unique (invoice_id, sequence_id, change_id)
-    );
+        unique (invoice_id, sequence_id, change_id)
+);
 
-alter table chargeback
+alter table dw.chargeback
     owner to postgres;
 
 create index if not exists chargeback_created_at
-    on chargeback (created_at);
+    on dw.chargeback (created_at);
 
 create index if not exists chargeback_event_created_at
-    on chargeback (event_created_at);
+    on dw.chargeback (event_created_at);
 
 create index if not exists chargeback_invoice_id
-    on chargeback (invoice_id);
+    on dw.chargeback (invoice_id);
 
 create index if not exists chargeback_party_id
-    on chargeback (party_id);
+    on dw.chargeback (party_id);
 
 create index if not exists chargeback_status
-    on chargeback (status);
+    on dw.chargeback (status);
 
-create table if not exists contract
+create table if not exists dw.contract
 (
     id                                                         bigserial
-    primary key,
+        primary key,
     event_created_at                                           timestamp                                      not null,
     contract_id                                                varchar                                        not null,
     party_id                                                   varchar                                        not null,
@@ -469,28 +269,28 @@ create table if not exists contract
     change_id                                                  integer,
     claim_effect_id                                            integer,
     constraint contract_uniq
-    unique (party_id, contract_id, sequence_id, change_id, claim_effect_id)
-    );
+        unique (party_id, contract_id, sequence_id, change_id, claim_effect_id)
+);
 
-alter table contract
+alter table dw.contract
     owner to postgres;
 
 create index if not exists contract_contract_id
-    on contract (contract_id);
+    on dw.contract (contract_id);
 
 create index if not exists contract_created_at
-    on contract (created_at);
+    on dw.contract (created_at);
 
 create index if not exists contract_event_created_at
-    on contract (event_created_at);
+    on dw.contract (event_created_at);
 
 create index if not exists contract_party_id
-    on contract (party_id);
+    on dw.contract (party_id);
 
-create table if not exists contract_adjustment
+create table if not exists dw.contract_adjustment
 (
     id                     bigserial
-    primary key,
+        primary key,
     cntrct_id              bigint    not null,
     contract_adjustment_id varchar   not null,
     created_at             timestamp not null,
@@ -499,31 +299,31 @@ create table if not exists contract_adjustment
     terms_id               integer   not null
 );
 
-alter table contract_adjustment
+alter table dw.contract_adjustment
     owner to postgres;
 
 create index if not exists contract_adjustment_idx
-    on contract_adjustment (cntrct_id);
+    on dw.contract_adjustment (cntrct_id);
 
-create table if not exists contract_revision
+create table if not exists dw.contract_revision
 (
     id       bigserial
-    primary key,
+        primary key,
     obj_id   bigint                                         not null,
     revision bigint                                         not null,
     wtime    timestamp default timezone('utc'::text, now()) not null
-    );
+);
 
-alter table contract_revision
+alter table dw.contract_revision
     owner to postgres;
 
 create unique index if not exists contract_revision_idx
-    on contract_revision (obj_id, revision);
+    on dw.contract_revision (obj_id, revision);
 
-create table if not exists contractor
+create table if not exists dw.contractor
 (
     id                                             bigserial
-    primary key,
+        primary key,
     event_created_at                               timestamp                                      not null,
     party_id                                       varchar                                        not null,
     contractor_id                                  varchar                                        not null,
@@ -561,55 +361,55 @@ create table if not exists contractor
     claim_effect_id                                integer,
     international_legal_entity_country_code        varchar,
     constraint contractor_uniq
-    unique (party_id, contractor_id, sequence_id, change_id, claim_effect_id)
-    );
+        unique (party_id, contractor_id, sequence_id, change_id, claim_effect_id)
+);
 
-alter table contractor
+alter table dw.contractor
     owner to postgres;
 
 create index if not exists contractor_contractor_id
-    on contractor (contractor_id);
+    on dw.contractor (contractor_id);
 
 create index if not exists contractor_event_created_at
-    on contractor (event_created_at);
+    on dw.contractor (event_created_at);
 
 create index if not exists contractor_party_id
-    on contractor (party_id);
+    on dw.contractor (party_id);
 
-create table if not exists contractor_revision
+create table if not exists dw.contractor_revision
 (
     id       bigserial
-    primary key,
+        primary key,
     obj_id   bigint                                         not null,
     revision bigint                                         not null,
     wtime    timestamp default timezone('utc'::text, now()) not null
-    );
+);
 
-alter table contractor_revision
+alter table dw.contractor_revision
     owner to postgres;
 
 create unique index if not exists contractor_revision_idx
-    on contractor_revision (obj_id, revision);
+    on dw.contractor_revision (obj_id, revision);
 
-create table if not exists country
+create table if not exists dw.country
 (
     id             bigserial
-    primary key,
+        primary key,
     version_id     bigint                                         not null,
     country_ref_id varchar                                        not null,
     name           varchar                                        not null,
     trade_bloc     text[]                                         not null,
     wtime          timestamp default timezone('utc'::text, now()) not null,
     current        boolean   default true                         not null
-    );
+);
 
-alter table country
+alter table dw.country
     owner to postgres;
 
-create table if not exists currency
+create table if not exists dw.currency
 (
     id              bigserial
-    primary key,
+        primary key,
     version_id      bigint                                         not null,
     currency_ref_id varchar                                        not null,
     name            varchar                                        not null,
@@ -618,21 +418,21 @@ create table if not exists currency
     exponent        smallint                                       not null,
     wtime           timestamp default timezone('utc'::text, now()) not null,
     current         boolean   default true                         not null
-    );
+);
 
-alter table currency
+alter table dw.currency
     owner to postgres;
 
 create index if not exists currency_idx
-    on currency (currency_ref_id);
+    on dw.currency (currency_ref_id);
 
 create index if not exists currency_version_id
-    on currency (version_id);
+    on dw.currency (version_id);
 
-create table if not exists deposit
+create table if not exists dw.deposit
 (
     id                      bigserial
-    primary key,
+        primary key,
     event_created_at        timestamp                                      not null,
     event_occured_at        timestamp                                      not null,
     sequence_id             integer                                        not null,
@@ -649,25 +449,25 @@ create table if not exists deposit
     current                 boolean   default true                         not null,
     external_id             varchar,
     constraint deposit_uniq
-    unique (deposit_id, sequence_id)
-    );
+        unique (deposit_id, sequence_id)
+);
 
-alter table deposit
+alter table dw.deposit
     owner to postgres;
 
 create index if not exists deposit_event_created_at_idx
-    on deposit (event_created_at);
+    on dw.deposit (event_created_at);
 
 create index if not exists deposit_event_occured_at_idx
-    on deposit (event_occured_at);
+    on dw.deposit (event_occured_at);
 
 create index if not exists deposit_id_idx
-    on deposit (deposit_id);
+    on dw.deposit (deposit_id);
 
-create table if not exists deposit_adjustment
+create table if not exists dw.deposit_adjustment
 (
     id               bigserial
-    primary key,
+        primary key,
     event_created_at timestamp                                      not null,
     event_occured_at timestamp                                      not null,
     sequence_id      integer                                        not null,
@@ -688,22 +488,22 @@ create table if not exists deposit_adjustment
     party_revision   bigint    default 0                            not null,
     domain_revision  bigint    default 0                            not null,
     constraint deposit_adjustment_uniq
-    unique (deposit_id, adjustment_id, sequence_id)
-    );
+        unique (deposit_id, adjustment_id, sequence_id)
+);
 
-alter table deposit_adjustment
+alter table dw.deposit_adjustment
     owner to postgres;
 
 create index if not exists deposit_adjustment_event_created_at_idx
-    on deposit_adjustment (event_created_at);
+    on dw.deposit_adjustment (event_created_at);
 
 create index if not exists deposit_adjustment_id_idx
-    on deposit_adjustment (deposit_id);
+    on dw.deposit_adjustment (deposit_id);
 
-create table if not exists deposit_revert
+create table if not exists dw.deposit_revert
 (
     id               bigserial
-    primary key,
+        primary key,
     event_created_at timestamp                                      not null,
     event_occured_at timestamp                                      not null,
     sequence_id      integer                                        not null,
@@ -724,22 +524,22 @@ create table if not exists deposit_revert
     party_revision   bigint    default 0                            not null,
     domain_revision  bigint    default 0                            not null,
     constraint deposit_revert_uniq
-    unique (deposit_id, revert_id, sequence_id)
-    );
+        unique (deposit_id, revert_id, sequence_id)
+);
 
-alter table deposit_revert
+alter table dw.deposit_revert
     owner to postgres;
 
 create index if not exists deposit_revert_event_created_at_idx
-    on deposit_revert (event_created_at);
+    on dw.deposit_revert (event_created_at);
 
 create index if not exists deposit_revert_id_idx
-    on deposit_revert (deposit_id);
+    on dw.deposit_revert (deposit_id);
 
-create table if not exists destination
+create table if not exists dw.destination
 (
     id                                bigserial
-    primary key,
+        primary key,
     event_created_at                  timestamp                                      not null,
     event_occured_at                  timestamp                                      not null,
     sequence_id                       integer                                        not null,
@@ -770,25 +570,25 @@ create table if not exists destination
     resource_digital_wallet_id        varchar,
     resource_digital_wallet_data      varchar,
     constraint destination_uniq
-    unique (destination_id, sequence_id)
-    );
+        unique (destination_id, sequence_id)
+);
 
-alter table destination
+alter table dw.destination
     owner to postgres;
 
 create index if not exists destination_event_created_at_idx
-    on destination (event_created_at);
+    on dw.destination (event_created_at);
 
 create index if not exists destination_event_occured_at_idx
-    on destination (event_occured_at);
+    on dw.destination (event_occured_at);
 
 create index if not exists destination_id_idx
-    on destination (destination_id);
+    on dw.destination (destination_id);
 
-create table if not exists fistful_cash_flow
+create table if not exists dw.fistful_cash_flow
 (
     id                             bigserial
-    primary key,
+        primary key,
     obj_id                         bigint                           not null,
     source_account_type            dw.cash_flow_account             not null,
     source_account_type_value      varchar                          not null,
@@ -802,16 +602,16 @@ create table if not exists fistful_cash_flow
     obj_type                       dw.fistful_cash_flow_change_type not null
 );
 
-alter table fistful_cash_flow
+alter table dw.fistful_cash_flow
     owner to postgres;
 
 create index if not exists fistful_cash_flow_obj_id_idx
-    on fistful_cash_flow (obj_id);
+    on dw.fistful_cash_flow (obj_id);
 
-create table if not exists identity
+create table if not exists dw.identity
 (
     id                             bigserial
-    primary key,
+        primary key,
     event_created_at               timestamp                                      not null,
     event_occured_at               timestamp                                      not null,
     sequence_id                    integer                                        not null,
@@ -827,28 +627,28 @@ create table if not exists identity
     blocked                        boolean,
     context_json                   varchar,
     constraint identity_uniq
-    unique (identity_id, sequence_id)
-    );
+        unique (identity_id, sequence_id)
+);
 
-alter table identity
+alter table dw.identity
     owner to postgres;
 
 create index if not exists identity_event_created_at_idx
-    on identity (event_created_at);
+    on dw.identity (event_created_at);
 
 create index if not exists identity_event_occured_at_idx
-    on identity (event_occured_at);
+    on dw.identity (event_occured_at);
 
 create index if not exists identity_id_idx
-    on identity (identity_id);
+    on dw.identity (identity_id);
 
 create index if not exists identity_party_id_idx
-    on identity (party_id);
+    on dw.identity (party_id);
 
-create table if not exists inspector
+create table if not exists dw.inspector
 (
     id                    bigserial
-    primary key,
+        primary key,
     version_id            bigint                                         not null,
     inspector_ref_id      integer                                        not null,
     name                  varchar                                        not null,
@@ -858,21 +658,21 @@ create table if not exists inspector
     fallback_risk_score   varchar,
     wtime                 timestamp default timezone('utc'::text, now()) not null,
     current               boolean   default true                         not null
-    );
+);
 
-alter table inspector
+alter table dw.inspector
     owner to postgres;
 
 create index if not exists inspector_idx
-    on inspector (inspector_ref_id);
+    on dw.inspector (inspector_ref_id);
 
 create index if not exists inspector_version_id
-    on inspector (version_id);
+    on dw.inspector (version_id);
 
-create table if not exists invoice
+create table if not exists dw.invoice
 (
     id                  bigserial
-    primary key,
+        primary key,
     event_created_at    timestamp                                      not null,
     invoice_id          varchar                                        not null,
     party_id            varchar                                        not null,
@@ -891,33 +691,33 @@ create table if not exists invoice
     change_id           integer,
     external_id         varchar,
     constraint invoice_uniq
-    unique (invoice_id, sequence_id, change_id)
-    );
+        unique (invoice_id, sequence_id, change_id)
+);
 
-alter table invoice
+alter table dw.invoice
     owner to postgres;
 
 create index if not exists invoice_created_at
-    on invoice (created_at);
+    on dw.invoice (created_at);
 
 create index if not exists invoice_event_created_at
-    on invoice (event_created_at);
+    on dw.invoice (event_created_at);
 
 create index if not exists invoice_external_id_idx
-    on invoice (external_id)
+    on dw.invoice (external_id)
     where (external_id IS NOT NULL);
 
 create index if not exists invoice_invoice_id
-    on invoice (invoice_id);
+    on dw.invoice (invoice_id);
 
 create index if not exists invoice_party_id
-    on invoice (party_id);
+    on dw.invoice (party_id);
 
-create table if not exists invoice_status_info
+create table if not exists dw.invoice_status_info
 (
     id               bigserial
-    constraint invoice_status_pkey
-    primary key,
+        constraint invoice_status_pkey
+            primary key,
     event_created_at timestamp                                      not null,
     invoice_id       varchar                                        not null,
     status           dw.invoice_status                              not null,
@@ -928,19 +728,19 @@ create table if not exists invoice_status_info
     change_id        integer,
     external_id      varchar,
     constraint invoice_status_uniq
-    unique (invoice_id, sequence_id, change_id)
-    );
+        unique (invoice_id, sequence_id, change_id)
+);
 
-alter table invoice_status_info
+alter table dw.invoice_status_info
     owner to postgres;
 
 create index if not exists invoice_status
-    on invoice_status_info (status);
+    on dw.invoice_status_info (status);
 
-create table if not exists invoice_cart
+create table if not exists dw.invoice_cart
 (
     id               bigserial
-    primary key,
+        primary key,
     event_created_at timestamp                                      not null,
     invoice_id       varchar                                        not null,
     product          varchar,
@@ -951,18 +751,18 @@ create table if not exists invoice_cart
     wtime            timestamp default timezone('utc'::text, now()) not null,
     sequence_id      bigint,
     change_id        integer
-    );
+);
 
-alter table invoice_cart
+alter table dw.invoice_cart
     owner to postgres;
 
 create index if not exists invoice_cart_invoice_id
-    on invoice_cart (invoice_id);
+    on dw.invoice_cart (invoice_id);
 
-create table if not exists party
+create table if not exists dw.party
 (
     id                         bigserial
-    primary key,
+        primary key,
     event_created_at           timestamp                                      not null,
     party_id                   varchar                                        not null,
     contact_info_email         varchar                                        not null,
@@ -984,31 +784,31 @@ create table if not exists party
     sequence_id                integer,
     change_id                  integer,
     constraint party_uniq
-    unique (party_id, sequence_id, change_id)
-    );
+        unique (party_id, sequence_id, change_id)
+);
 
-alter table party
+alter table dw.party
     owner to postgres;
 
 create index if not exists party_contact_info_email
-    on party (contact_info_email);
+    on dw.party (contact_info_email);
 
 create index if not exists party_created_at
-    on party (created_at);
+    on dw.party (created_at);
 
 create index if not exists party_current
-    on party (current);
+    on dw.party (current);
 
 create index if not exists party_event_created_at
-    on party (event_created_at);
+    on dw.party (event_created_at);
 
 create index if not exists party_party_id
-    on party (party_id);
+    on dw.party (party_id);
 
-create table if not exists payment
+create table if not exists dw.payment
 (
     id                              bigserial
-    primary key,
+        primary key,
     event_created_at                timestamp                                      not null,
     invoice_id                      varchar                                        not null,
     payment_id                      varchar                                        not null,
@@ -1028,32 +828,32 @@ create table if not exists payment
     payment_flow_on_hold_expiration varchar,
     payment_flow_held_until         timestamp,
     constraint payment_uniq
-    unique (invoice_id, payment_id, sequence_id, change_id)
-    );
+        unique (invoice_id, payment_id, sequence_id, change_id)
+);
 
-alter table payment
+alter table dw.payment
     owner to postgres;
 
 create index if not exists payment_created_at
-    on payment (created_at);
+    on dw.payment (created_at);
 
 create index if not exists payment_event_created_at
-    on payment (event_created_at);
+    on dw.payment (event_created_at);
 
 create index if not exists payment_external_id_idx
-    on payment (external_id)
+    on dw.payment (external_id)
     where (external_id IS NOT NULL);
 
 create index if not exists payment_invoice_id
-    on payment (invoice_id);
+    on dw.payment (invoice_id);
 
 create index if not exists payment_party_id
-    on payment (party_id);
+    on dw.payment (party_id);
 
-create table if not exists payment_fee
+create table if not exists dw.payment_fee
 (
     id                bigserial
-    primary key,
+        primary key,
     event_created_at  timestamp                                      not null,
     invoice_id        varchar                                        not null,
     payment_id        varchar                                        not null,
@@ -1066,16 +866,16 @@ create table if not exists payment_fee
     sequence_id       bigint,
     change_id         integer,
     constraint payment_fee_uniq
-    unique (invoice_id, payment_id, sequence_id, change_id)
-    );
+        unique (invoice_id, payment_id, sequence_id, change_id)
+);
 
-alter table payment_fee
+alter table dw.payment_fee
     owner to postgres;
 
-create table if not exists payment_route
+create table if not exists dw.payment_route
 (
     id                bigserial
-    primary key,
+        primary key,
     event_created_at  timestamp                                      not null,
     invoice_id        varchar                                        not null,
     payment_id        varchar                                        not null,
@@ -1086,17 +886,17 @@ create table if not exists payment_route
     wtime             timestamp default timezone('utc'::text, now()) not null,
     current           boolean   default false                        not null,
     constraint payment_route_uniq
-    unique (invoice_id, payment_id, sequence_id, change_id)
-    );
+        unique (invoice_id, payment_id, sequence_id, change_id)
+);
 
-alter table payment_route
+alter table dw.payment_route
     owner to postgres;
 
-create table if not exists payment_status_info
+create table if not exists dw.payment_status_info
 (
     id               bigserial
-    constraint payment_status_pkey
-    primary key,
+        constraint payment_status_pkey
+            primary key,
     event_created_at timestamp                                      not null,
     invoice_id       varchar                                        not null,
     payment_id       varchar                                        not null,
@@ -1110,20 +910,20 @@ create table if not exists payment_status_info
     sequence_id      bigint,
     change_id        integer,
     constraint payment_status_uniq
-    unique (invoice_id, payment_id, sequence_id, change_id)
-    );
+        unique (invoice_id, payment_id, sequence_id, change_id)
+);
 
-alter table payment_status_info
+alter table dw.payment_status_info
     owner to postgres;
 
 create index if not exists payment_status_info_idx
-    on payment_status_info (status, event_created_at);
+    on dw.payment_status_info (status, event_created_at);
 
-create table if not exists payment_payer_info
+create table if not exists dw.payment_payer_info
 (
     id                           bigserial
-    constraint payment_payment_payer_info_pkey
-    primary key,
+        constraint payment_payment_payer_info_pkey
+            primary key,
     event_created_at             timestamp                                      not null,
     invoice_id                   varchar,
     payment_id                   varchar,
@@ -1158,16 +958,16 @@ create table if not exists payment_payer_info
     sequence_id                  bigint,
     change_id                    integer,
     constraint payment_payment_payer_info_uniq
-    unique (invoice_id, payment_id, sequence_id, change_id)
-    );
+        unique (invoice_id, payment_id, sequence_id, change_id)
+);
 
-alter table payment_payer_info
+alter table dw.payment_payer_info
     owner to postgres;
 
-create table if not exists payment_additional_info
+create table if not exists dw.payment_additional_info
 (
     id                    bigserial
-    primary key,
+        primary key,
     event_created_at      timestamp                                      not null,
     invoice_id            varchar                                        not null,
     payment_id            varchar                                        not null,
@@ -1188,16 +988,16 @@ create table if not exists payment_additional_info
     sequence_id           bigint,
     change_id             integer,
     constraint payment_additional_info_uniq
-    unique (invoice_id, payment_id, sequence_id, change_id)
-    );
+        unique (invoice_id, payment_id, sequence_id, change_id)
+);
 
-alter table payment_additional_info
+alter table dw.payment_additional_info
     owner to postgres;
 
-create table if not exists payment_recurrent_info
+create table if not exists dw.payment_recurrent_info
 (
     id               bigserial
-    primary key,
+        primary key,
     event_created_at timestamp                                      not null,
     invoice_id       varchar                                        not null,
     payment_id       varchar                                        not null,
@@ -1207,16 +1007,16 @@ create table if not exists payment_recurrent_info
     sequence_id      bigint,
     change_id        integer,
     constraint payment_recurrent_info_uniq
-    unique (invoice_id, payment_id, sequence_id, change_id)
-    );
+        unique (invoice_id, payment_id, sequence_id, change_id)
+);
 
-alter table payment_recurrent_info
+alter table dw.payment_recurrent_info
     owner to postgres;
 
-create table if not exists payment_risk_data
+create table if not exists dw.payment_risk_data
 (
     id               bigserial
-    primary key,
+        primary key,
     event_created_at timestamp                                      not null,
     invoice_id       varchar                                        not null,
     payment_id       varchar                                        not null,
@@ -1226,16 +1026,16 @@ create table if not exists payment_risk_data
     sequence_id      bigint,
     change_id        integer,
     constraint payment_risk_data_uniq
-    unique (invoice_id, payment_id, sequence_id, change_id)
-    );
+        unique (invoice_id, payment_id, sequence_id, change_id)
+);
 
-alter table payment_risk_data
+alter table dw.payment_risk_data
     owner to postgres;
 
-create table if not exists payment_institution
+create table if not exists dw.payment_institution
 (
     id                                    bigserial
-    primary key,
+        primary key,
     version_id                            bigint                                         not null,
     payment_institution_ref_id            integer                                        not null,
     name                                  varchar                                        not null,
@@ -1250,21 +1050,21 @@ create table if not exists payment_institution
     residences_json                       varchar                                        not null,
     wtime                                 timestamp default timezone('utc'::text, now()) not null,
     current                               boolean   default true                         not null
-    );
+);
 
-alter table payment_institution
+alter table dw.payment_institution
     owner to postgres;
 
 create index if not exists payment_institution_idx
-    on payment_institution (payment_institution_ref_id);
+    on dw.payment_institution (payment_institution_ref_id);
 
 create index if not exists payment_institution_version_id
-    on payment_institution (version_id);
+    on dw.payment_institution (version_id);
 
-create table if not exists payment_method
+create table if not exists dw.payment_method
 (
     id                    bigserial
-    primary key,
+        primary key,
     version_id            bigint                                         not null,
     payment_method_ref_id varchar                                        not null,
     name                  varchar                                        not null,
@@ -1272,21 +1072,21 @@ create table if not exists payment_method
     type                  dw.payment_method_type                         not null,
     wtime                 timestamp default timezone('utc'::text, now()) not null,
     current               boolean   default true                         not null
-    );
+);
 
-alter table payment_method
+alter table dw.payment_method
     owner to postgres;
 
 create index if not exists payment_method_idx
-    on payment_method (payment_method_ref_id);
+    on dw.payment_method (payment_method_ref_id);
 
 create index if not exists payment_method_version_id
-    on payment_method (version_id);
+    on dw.payment_method (version_id);
 
-create table if not exists payment_routing_rule
+create table if not exists dw.payment_routing_rule
 (
     id                     bigserial
-    primary key,
+        primary key,
     rule_ref_id            integer                                        not null,
     name                   varchar                                        not null,
     description            varchar,
@@ -1294,19 +1094,19 @@ create table if not exists payment_routing_rule
     current                boolean   default true                         not null,
     routing_decisions_json varchar                                        not null,
     version_id             bigint                                         not null
-    );
+);
 
-alter table payment_routing_rule
+alter table dw.payment_routing_rule
     owner to postgres;
 
 create index if not exists payment_routing_rule_ref_id
-    on payment_routing_rule (rule_ref_id);
+    on dw.payment_routing_rule (rule_ref_id);
 
-create table if not exists payout
+create table if not exists dw.payout
 (
     id                bigserial
-    constraint payout_id_pkey
-    primary key,
+        constraint payout_id_pkey
+            primary key,
     payout_id         varchar                                        not null,
     event_created_at  timestamp                                      not null,
     sequence_id       integer                                        not null,
@@ -1322,37 +1122,37 @@ create table if not exists payout
     wtime             timestamp default timezone('utc'::text, now()) not null,
     current           boolean   default true                         not null,
     constraint payout_payout_id_ukey
-    unique (payout_id, sequence_id)
-    );
+        unique (payout_id, sequence_id)
+);
 
-alter table payout
+alter table dw.payout
     owner to postgres;
 
-create table if not exists payout_method
+create table if not exists dw.payout_method
 (
     id                   bigserial
-    primary key,
+        primary key,
     version_id           bigint                                         not null,
     payout_method_ref_id varchar                                        not null,
     name                 varchar                                        not null,
     description          varchar                                        not null,
     wtime                timestamp default timezone('utc'::text, now()) not null,
     current              boolean   default true                         not null
-    );
+);
 
-alter table payout_method
+alter table dw.payout_method
     owner to postgres;
 
 create index if not exists payout_method_idx
-    on payout_method (payout_method_ref_id);
+    on dw.payout_method (payout_method_ref_id);
 
 create index if not exists payout_method_version_id
-    on payout_method (version_id);
+    on dw.payout_method (version_id);
 
-create table if not exists payout_tool
+create table if not exists dw.payout_tool
 (
     id                                                             bigserial
-    primary key,
+        primary key,
     cntrct_id                                                      bigint              not null,
     payout_tool_id                                                 varchar             not null,
     created_at                                                     timestamp           not null,
@@ -1382,16 +1182,16 @@ create table if not exists payout_tool
     payout_tool_info_wallet_info_wallet_id                         varchar
 );
 
-alter table payout_tool
+alter table dw.payout_tool
     owner to postgres;
 
 create index if not exists payout_tool_idx
-    on payout_tool (cntrct_id);
+    on dw.payout_tool (cntrct_id);
 
-create table if not exists provider
+create table if not exists dw.provider
 (
     id                           bigserial
-    primary key,
+        primary key,
     version_id                   bigint                                         not null,
     provider_ref_id              integer                                        not null,
     name                         varchar                                        not null,
@@ -1407,21 +1207,21 @@ create table if not exists provider
     identity                     varchar,
     wallet_terms_json            varchar,
     params_schema_json           varchar
-    );
+);
 
-alter table provider
+alter table dw.provider
     owner to postgres;
 
 create index if not exists provider_idx
-    on provider (provider_ref_id);
+    on dw.provider (provider_ref_id);
 
 create index if not exists provider_version_id
-    on provider (version_id);
+    on dw.provider (version_id);
 
-create table if not exists proxy
+create table if not exists dw.proxy
 (
     id           bigserial
-    primary key,
+        primary key,
     version_id   bigint                                         not null,
     proxy_ref_id integer                                        not null,
     name         varchar                                        not null,
@@ -1429,21 +1229,21 @@ create table if not exists proxy
     url          varchar                                        not null,
     wtime        timestamp default timezone('utc'::text, now()) not null,
     current      boolean   default true                         not null
-    );
+);
 
-alter table proxy
+alter table dw.proxy
     owner to postgres;
 
 create index if not exists proxy_idx
-    on proxy (proxy_ref_id);
+    on dw.proxy (proxy_ref_id);
 
 create index if not exists proxy_version_id
-    on proxy (version_id);
+    on dw.proxy (version_id);
 
-create table if not exists rate
+create table if not exists dw.rate
 (
     id                        bigserial
-    primary key,
+        primary key,
     event_created_at          timestamp                                      not null,
     source_id                 varchar                                        not null,
     lower_bound_inclusive     timestamp                                      not null,
@@ -1457,24 +1257,24 @@ create table if not exists rate
     wtime                     timestamp default timezone('utc'::text, now()) not null,
     current                   boolean   default true                         not null,
     sequence_id               bigint
-    );
+);
 
-alter table rate
+alter table dw.rate
     owner to postgres;
 
 create index if not exists rate_event_created_at_idx
-    on rate (event_created_at);
+    on dw.rate (event_created_at);
 
 create index if not exists rate_source_id_idx
-    on rate (source_id);
+    on dw.rate (source_id);
 
 create unique index if not exists rate_ukey
-    on rate (source_id, sequence_id, source_symbolic_code, destination_symbolic_code);
+    on dw.rate (source_id, sequence_id, source_symbolic_code, destination_symbolic_code);
 
-create table if not exists recurrent_payment_tool
+create table if not exists dw.recurrent_payment_tool
 (
     id                                                        bigserial
-    primary key,
+        primary key,
     sequence_id                                               integer                                        not null,
     change_id                                                 integer                                        not null,
     event_created_at                                          timestamp                                      not null,
@@ -1523,19 +1323,19 @@ create table if not exists recurrent_payment_tool
     current                                                   boolean   default true                         not null,
     mobile_commerce_operator                                  varchar,
     constraint recurrent_payment_tool_uniq
-    unique (recurrent_payment_tool_id, sequence_id, change_id)
-    );
+        unique (recurrent_payment_tool_id, sequence_id, change_id)
+);
 
-alter table recurrent_payment_tool
+alter table dw.recurrent_payment_tool
     owner to postgres;
 
 create index if not exists recurrent_payment_tool_id_idx
-    on recurrent_payment_tool (recurrent_payment_tool_id);
+    on dw.recurrent_payment_tool (recurrent_payment_tool_id);
 
-create table if not exists refund
+create table if not exists dw.refund
 (
     id                                               bigserial
-    primary key,
+        primary key,
     event_created_at                                 timestamp                                      not null,
     domain_revision                                  bigint                                         not null,
     refund_id                                        varchar                                        not null,
@@ -1561,47 +1361,47 @@ create table if not exists refund
     change_id                                        integer,
     external_id                                      varchar,
     constraint refund_uniq
-    unique (invoice_id, sequence_id, change_id)
-    );
+        unique (invoice_id, sequence_id, change_id)
+);
 
-alter table refund
+alter table dw.refund
     owner to postgres;
 
 create index if not exists refund_created_at
-    on refund (created_at);
+    on dw.refund (created_at);
 
 create index if not exists refund_event_created_at
-    on refund (event_created_at);
+    on dw.refund (event_created_at);
 
 create index if not exists refund_external_id_idx
-    on refund (external_id)
+    on dw.refund (external_id)
     where (external_id IS NOT NULL);
 
 create index if not exists refund_invoice_id
-    on refund (invoice_id);
+    on dw.refund (invoice_id);
 
 create index if not exists refund_party_id
-    on refund (party_id);
+    on dw.refund (party_id);
 
 create index if not exists refund_status
-    on refund (status);
+    on dw.refund (status);
 
-create table if not exists shedlock
+create table if not exists dw.shedlock
 (
     name       varchar(64) not null
-    primary key,
+        primary key,
     lock_until timestamp(3),
     locked_at  timestamp(3),
     locked_by  varchar(255)
-    );
+);
 
-alter table shedlock
+alter table dw.shedlock
     owner to postgres;
 
-create table if not exists shop
+create table if not exists dw.shop
 (
     id                         bigserial
-    primary key,
+        primary key,
     event_created_at           timestamp                                      not null,
     party_id                   varchar                                        not null,
     shop_id                    varchar                                        not null,
@@ -1631,43 +1431,43 @@ create table if not exists shop
     change_id                  integer,
     claim_effect_id            integer,
     constraint shop_uniq
-    unique (party_id, shop_id, sequence_id, change_id, claim_effect_id)
-    );
+        unique (party_id, shop_id, sequence_id, change_id, claim_effect_id)
+);
 
-alter table shop
+alter table dw.shop
     owner to postgres;
 
 create index if not exists shop_created_at
-    on shop (created_at);
+    on dw.shop (created_at);
 
 create index if not exists shop_event_created_at
-    on shop (event_created_at);
+    on dw.shop (event_created_at);
 
 create index if not exists shop_party_id
-    on shop (party_id);
+    on dw.shop (party_id);
 
 create index if not exists shop_shop_id
-    on shop (shop_id);
+    on dw.shop (shop_id);
 
-create table if not exists shop_revision
+create table if not exists dw.shop_revision
 (
     id       bigserial
-    primary key,
+        primary key,
     obj_id   bigint                                         not null,
     revision bigint                                         not null,
     wtime    timestamp default timezone('utc'::text, now()) not null
-    );
+);
 
-alter table shop_revision
+alter table dw.shop_revision
     owner to postgres;
 
 create unique index if not exists shop_revision_idx
-    on shop_revision (obj_id, revision);
+    on dw.shop_revision (obj_id, revision);
 
-create table if not exists source
+create table if not exists dw.source
 (
     id                        bigserial
-    primary key,
+        primary key,
     event_created_at          timestamp                                      not null,
     event_occured_at          timestamp                                      not null,
     sequence_id               integer                                        not null,
@@ -1684,25 +1484,25 @@ create table if not exists source
     current                   boolean   default true                         not null,
     external_id               varchar,
     constraint source_uniq
-    unique (source_id, sequence_id)
-    );
+        unique (source_id, sequence_id)
+);
 
-alter table source
+alter table dw.source
     owner to postgres;
 
 create index if not exists source_event_created_at_idx
-    on source (event_created_at);
+    on dw.source (event_created_at);
 
 create index if not exists source_event_occured_at_idx
-    on source (event_occured_at);
+    on dw.source (event_occured_at);
 
 create index if not exists source_id_idx
-    on source (source_id);
+    on dw.source (source_id);
 
-create table if not exists term_set_hierarchy
+create table if not exists dw.term_set_hierarchy
 (
     id                        bigserial
-    primary key,
+        primary key,
     version_id                bigint                                         not null,
     term_set_hierarchy_ref_id integer                                        not null,
     name                      varchar,
@@ -1711,21 +1511,21 @@ create table if not exists term_set_hierarchy
     term_sets_json            varchar                                        not null,
     wtime                     timestamp default timezone('utc'::text, now()) not null,
     current                   boolean   default true                         not null
-    );
+);
 
-alter table term_set_hierarchy
+alter table dw.term_set_hierarchy
     owner to postgres;
 
 create index if not exists term_set_hierarchy_idx
-    on term_set_hierarchy (term_set_hierarchy_ref_id);
+    on dw.term_set_hierarchy (term_set_hierarchy_ref_id);
 
 create index if not exists term_set_hierarchy_version_id
-    on term_set_hierarchy (version_id);
+    on dw.term_set_hierarchy (version_id);
 
-create table if not exists terminal
+create table if not exists dw.terminal
 (
     id                       bigserial
-    primary key,
+        primary key,
     version_id               bigint                                         not null,
     terminal_ref_id          integer                                        not null,
     name                     varchar                                        not null,
@@ -1738,36 +1538,36 @@ create table if not exists terminal
     external_merchant_id     varchar,
     mcc                      varchar,
     terminal_provider_ref_id integer
-    );
+);
 
-alter table terminal
+alter table dw.terminal
     owner to postgres;
 
 create index if not exists terminal_idx
-    on terminal (terminal_ref_id);
+    on dw.terminal (terminal_ref_id);
 
 create index if not exists terminal_version_id
-    on terminal (version_id);
+    on dw.terminal (version_id);
 
-create table if not exists trade_bloc
+create table if not exists dw.trade_bloc
 (
     id                bigserial
-    primary key,
+        primary key,
     version_id        bigint                                         not null,
     trade_bloc_ref_id varchar                                        not null,
     name              varchar                                        not null,
     description       varchar,
     wtime             timestamp default timezone('utc'::text, now()) not null,
     current           boolean   default true                         not null
-    );
+);
 
-alter table trade_bloc
+alter table dw.trade_bloc
     owner to postgres;
 
-create table if not exists wallet
+create table if not exists dw.wallet
 (
     id                   bigserial
-    primary key,
+        primary key,
     event_created_at     timestamp                                      not null,
     event_occured_at     timestamp                                      not null,
     sequence_id          integer                                        not null,
@@ -1782,25 +1582,25 @@ create table if not exists wallet
     accounter_account_id bigint,
     external_id          varchar,
     constraint wallet_uniq
-    unique (wallet_id, sequence_id)
-    );
+        unique (wallet_id, sequence_id)
+);
 
-alter table wallet
+alter table dw.wallet
     owner to postgres;
 
 create index if not exists wallet_event_created_at_idx
-    on wallet (event_created_at);
+    on dw.wallet (event_created_at);
 
 create index if not exists wallet_event_occured_at_idx
-    on wallet (event_occured_at);
+    on dw.wallet (event_occured_at);
 
 create index if not exists wallet_id_idx
-    on wallet (wallet_id);
+    on dw.wallet (wallet_id);
 
-create table if not exists withdrawal
+create table if not exists dw.withdrawal
 (
     id                                    bigserial
-    primary key,
+        primary key,
     event_created_at                      timestamp                                      not null,
     event_occured_at                      timestamp                                      not null,
     sequence_id                           integer                                        not null,
@@ -1822,25 +1622,25 @@ create table if not exists withdrawal
     provider_id                           integer,
     terminal_id                           varchar,
     constraint withdrawal_uniq
-    unique (withdrawal_id, sequence_id)
-    );
+        unique (withdrawal_id, sequence_id)
+);
 
-alter table withdrawal
+alter table dw.withdrawal
     owner to postgres;
 
 create index if not exists withdrawal_event_created_at_idx
-    on withdrawal (event_created_at);
+    on dw.withdrawal (event_created_at);
 
 create index if not exists withdrawal_event_occured_at_idx
-    on withdrawal (event_occured_at);
+    on dw.withdrawal (event_occured_at);
 
 create index if not exists withdrawal_id_idx
-    on withdrawal (withdrawal_id);
+    on dw.withdrawal (withdrawal_id);
 
-create table if not exists withdrawal_provider
+create table if not exists dw.withdrawal_provider
 (
     id                         bigserial
-    primary key,
+        primary key,
     version_id                 bigint                                         not null,
     withdrawal_provider_ref_id integer                                        not null,
     name                       varchar                                        not null,
@@ -1851,22 +1651,22 @@ create table if not exists withdrawal_provider
     accounts_json              varchar,
     wtime                      timestamp default timezone('utc'::text, now()) not null,
     current                    boolean   default true                         not null
-    );
+);
 
-alter table withdrawal_provider
+alter table dw.withdrawal_provider
     owner to postgres;
 
 create index if not exists withdrawal_provider_idx
-    on withdrawal_provider (withdrawal_provider_ref_id);
+    on dw.withdrawal_provider (withdrawal_provider_ref_id);
 
 create index if not exists withdrawal_provider_version_id
-    on withdrawal_provider (version_id);
+    on dw.withdrawal_provider (version_id);
 
-create table if not exists withdrawal_session
+create table if not exists dw.withdrawal_session
 (
     id                                bigserial
-    constraint withdrawal_session_pk
-    primary key,
+        constraint withdrawal_session_pk
+            primary key,
     event_created_at                  timestamp                                      not null,
     event_occured_at                  timestamp                                      not null,
     sequence_id                       integer                                        not null,
@@ -1909,26 +1709,26 @@ create table if not exists withdrawal_session
     resource_digital_wallet_id        varchar,
     resource_digital_wallet_data      varchar,
     constraint withdrawal_session_uniq
-    unique (withdrawal_session_id, sequence_id)
-    );
+        unique (withdrawal_session_id, sequence_id)
+);
 
-alter table withdrawal_session
+alter table dw.withdrawal_session
     owner to postgres;
 
 create index if not exists withdrawal_session_event_created_at_idx
-    on withdrawal_session (event_created_at);
+    on dw.withdrawal_session (event_created_at);
 
 create index if not exists withdrawal_session_event_occured_at_idx
-    on withdrawal_session (event_occured_at);
+    on dw.withdrawal_session (event_occured_at);
 
 create index if not exists withdrawal_session_id_idx
-    on withdrawal_session (withdrawal_session_id);
+    on dw.withdrawal_session (withdrawal_session_id);
 
-create table if not exists limit_config
+create table if not exists dw.limit_config
 (
     id                                         bigserial
-    constraint limit_config_id_pkey
-    primary key,
+        constraint limit_config_id_pkey
+            primary key,
     source_id                                  varchar                                        not null,
     sequence_id                                integer                                        not null,
     event_occured_at                           timestamp                                      not null,
@@ -1951,17 +1751,17 @@ create table if not exists limit_config
     wtime                                      timestamp default timezone('utc'::text, now()) not null,
     current                                    boolean   default true                         not null,
     constraint limit_config_limit_config_id_ukey
-    unique (limit_config_id, sequence_id)
-    );
+        unique (limit_config_id, sequence_id)
+);
 
-alter table limit_config
+alter table dw.limit_config
     owner to postgres;
 
-create table if not exists ex_rate
+create table if not exists dw.ex_rate
 (
     id                                 bigserial,
     event_id                           uuid      not null
-    unique,
+        unique,
     event_created_at                   timestamp not null,
     source_currency_symbolic_code      varchar   not null,
     source_currency_exponent           smallint  not null,
@@ -1972,157 +1772,20 @@ create table if not exists ex_rate
     rate_timestamp                     timestamp not null
 );
 
-alter table ex_rate
+alter table dw.ex_rate
     owner to postgres;
 
 create index if not exists rate_timestamp_idx
-    on ex_rate (rate_timestamp);
+    on dw.ex_rate (rate_timestamp);
 
 create index if not exists source_currency_sc_destination_currency_sc_timestamp_idx
-    on ex_rate (source_currency_symbolic_code, destination_currency_symbolic_code, rate_timestamp);
+    on dw.ex_rate (source_currency_symbolic_code, destination_currency_symbolic_code, rate_timestamp);
 
-create table if not exists dominant_last_version_id
+create table if not exists dw.dominant_last_version_id
 (
     version_id bigint                                         not null,
     wtime      timestamp default timezone('utc'::text, now()) not null
-    );
+);
 
-alter table dominant_last_version_id
+alter table dw.dominant_last_version_id
     owner to postgres;
-
-create or replace function get_cashflow_sum(_cash_flow dw.cash_flow, obj_type dw.payment_change_type, source_account_type dw.cash_flow_account, source_account_type_values character varying[], destination_account_type dw.cash_flow_account, destination_account_type_values character varying[]) returns bigint
-    immutable
-    parallel safe
-    language plpgsql
-as
-$$
-begin
-return (
-    coalesce(
-            (
-                select amount
-                from (select ($1).*) as cash_flow
-                where cash_flow.obj_type = $2
-                  and cash_flow.source_account_type = $3
-                  and cash_flow.source_account_type_value = ANY ($4)
-                  and cash_flow.destination_account_type = $5
-                  and cash_flow.destination_account_type_value = ANY ($6)
-                  and (
-                        (cash_flow.obj_type = 'adjustment' and cash_flow.adj_flow_type = 'new_cash_flow')
-                        or (cash_flow.obj_type != 'adjustment' and cash_flow.adj_flow_type is null)
-                    )
-            ), 0)
-    );
-end;
-$$;
-
-alter function get_cashflow_sum(dw.cash_flow, dw.payment_change_type, dw.cash_flow_account, character varying[], dw.cash_flow_account, character varying[]) owner to postgres;
-
-create or replace function cashflow_sum_finalfunc(amount bigint) returns bigint
-    immutable
-    parallel safe
-    language plpgsql
-as
-$$
-begin
-return amount;
-end;
-$$;
-
-alter function cashflow_sum_finalfunc(bigint) owner to postgres;
-
-create or replace function get_refund_fee_sfunc(amount bigint, cash_flow dw.cash_flow) returns bigint
-    immutable
-    parallel safe
-    language plpgsql
-as
-$$
-begin
-return $1 + (
-    dw.get_cashflow_sum(
-            $2,
-            'refund'::dw.payment_change_type,
-            'merchant'::dw.cash_flow_account,
-            '{"settlement"}',
-            'system'::dw.cash_flow_account,
-            '{"settlement"}'
-        )
-    );
-end;
-$$;
-
-alter function get_refund_fee_sfunc(bigint, dw.cash_flow) owner to postgres;
-
-create or replace function get_refund_external_fee_sfunc(amount bigint, cash_flow dw.cash_flow) returns bigint
-    immutable
-    parallel safe
-    language plpgsql
-as
-$$
-begin
-return $1 + (
-    dw.get_cashflow_sum(
-            $2,
-            'refund'::dw.payment_change_type,
-            'system'::dw.cash_flow_account,
-            '{"settlement"}',
-            'external'::dw.cash_flow_account,
-            '{"income", "outcome"}'
-        )
-    );
-end;
-$$;
-
-alter function get_refund_external_fee_sfunc(bigint, dw.cash_flow) owner to postgres;
-
-create or replace function get_refund_provider_fee_sfunc(amount bigint, cash_flow dw.cash_flow) returns bigint
-    immutable
-    parallel safe
-    language plpgsql
-as
-$$
-begin
-return $1 + (
-    dw.get_cashflow_sum(
-            $2,
-            'refund'::dw.payment_change_type,
-            'system'::dw.cash_flow_account,
-            '{"settlement"}',
-            'provider'::dw.cash_flow_account,
-            '{"settlement"}'
-        )
-    );
-end;
-$$;
-
-alter function get_refund_provider_fee_sfunc(bigint, dw.cash_flow) owner to postgres;
-
-create aggregate get_refund_external_fee(dw.cash_flow) (
-    sfunc = get_refund_external_fee_sfunc,
-    stype = bigint,
-    finalfunc = cashflow_sum_finalfunc,
-    initcond = '0',
-    parallel = safe
-    );
-
-alter aggregate get_refund_external_fee(dw.cash_flow) owner to postgres;
-
-create aggregate get_refund_fee(dw.cash_flow) (
-    sfunc = get_refund_fee_sfunc,
-    stype = bigint,
-    finalfunc = cashflow_sum_finalfunc,
-    initcond = '0',
-    parallel = safe
-    );
-
-alter aggregate get_refund_fee(dw.cash_flow) owner to postgres;
-
-create aggregate get_refund_provider_fee(dw.cash_flow) (
-    sfunc = get_refund_provider_fee_sfunc,
-    stype = bigint,
-    finalfunc = cashflow_sum_finalfunc,
-    initcond = '0',
-    parallel = safe
-    );
-
-alter aggregate get_refund_provider_fee(dw.cash_flow) owner to postgres;
