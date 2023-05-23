@@ -11,7 +11,7 @@ management:
   metrics:
     export:
       prometheus:
-        enabled: false
+        enabled: true
     tags:
       application: '${project.name}'
   endpoint:
@@ -37,3 +37,6 @@ spring:
 
 schedule:
   cron: '*/30 * * * * *' #every 30 seconds
+
+interval:
+  time: 30 #seconds
