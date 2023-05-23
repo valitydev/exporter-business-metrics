@@ -9,7 +9,7 @@ public enum Metric {
     PAYMENTS_COUNT(
             formatWithPrefix("payments"),
             "Count of payments",
-            MetricUnit.COUNT.getUnit());
+            "count");
 
     @Getter
     private final String name;
@@ -19,6 +19,6 @@ public enum Metric {
     private final String unit;
 
     private static String formatWithPrefix(String name) {
-        return String.format("bme_%s", name);
+        return String.format("ebem_%s", name);
     }
 }
