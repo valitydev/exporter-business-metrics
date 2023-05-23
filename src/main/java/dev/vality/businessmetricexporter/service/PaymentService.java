@@ -3,7 +3,10 @@ package dev.vality.businessmetricexporter.service;
 import dev.vality.businessmetricexporter.metrics.PaymentsGaugeMetrics;
 import dev.vality.businessmetricexporter.model.Metric;
 import dev.vality.businessmetricexporter.repository.PaymentRepository;
-import io.micrometer.core.instrument.*;
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tag;
+import io.micrometer.core.instrument.Tags;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,14 +31,16 @@ public class PaymentService {
     public void registerMetrics(MeterRegistry meterRegistry) {
         var actualPayments = paymentRepository.getPaymentDtoList(intervalTime);
         log.debug("Actual payments by {} seconds interval = {}", intervalTime, actualPayments);
-        paymentsGaugeMetrics.stream()
+        var gauges = paymentsGaugeMetrics.stream()
                 .flatMap(handler -> handler.aggregate(actualPayments).entrySet().stream())
                 .map(e -> Gauge.builder(getNameWithSuffix(e.getKey()), e, Map.Entry::getValue)
                         .description(getDescription(e.getKey()))
                         .baseUnit(Metric.PAYMENTS_COUNT.getUnit())
                         .tags(e.getKey()))
-                .forEach(gauge -> gauge.register(meterRegistry));
-
+                .toList();
+        for (var gauge : gauges) {
+            gauge.register(meterRegistry);
+        }
     }
 
     private String getDescription(Tags tags) {

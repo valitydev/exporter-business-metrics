@@ -1,6 +1,6 @@
 package dev.vality.businessmetricexporter.entity;
 
-import lombok.*;
+import lombok.Data;
 
 import javax.persistence.*;
 
