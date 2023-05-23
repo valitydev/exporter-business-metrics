@@ -11,6 +11,8 @@ public class CustomTag {
     public static final String STATUS_TAG = "status";
     public static final String CURRENCY_TAG = "currency";
     public static final String COUNTRY_TAG = "issuer_country";
+    public static final String SHOP_TAG = "shop";
+    public static final String BANK_TAG = "issuer_bank";
 
     public static Tag provider(String providerName) {
         return Tag.of(PROVIDER_TAG, providerName);
@@ -34,5 +36,13 @@ public class CustomTag {
 
     public static Tag country(String country) {
         return Tag.of(COUNTRY_TAG, country);
+    }
+
+    public static Tag shop(String shop) {
+        return Tag.of(SHOP_TAG, shop);
+    }
+
+    public static Tag bank(String bank) {
+        return Tag.of(BANK_TAG, bank);
     }
 }
