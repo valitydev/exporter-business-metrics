@@ -1,0 +1,18 @@
+insert into dw.shop (id, event_created_at, party_id, shop_id, created_at, blocking, blocking_unblocked_reason,
+                     blocking_unblocked_since, blocking_blocked_reason, blocking_blocked_since, suspension,
+                     suspension_active_since, suspension_suspended_since, details_name, details_description,
+                     location_url, category_id, account_currency_code, account_settlement, account_guarantee,
+                     account_payout, contract_id, payout_tool_id, payout_schedule_id, wtime, current, sequence_id,
+                     change_id, claim_effect_id)
+values (6258160588867962918, '2016-10-14 08:08:31.000000', 'nKXioVHIvXp', '1', '2012-07-08 03:01:16.000000',
+        'unblocked', 'EfPHzZFYCCcIhXaEB', '2020-09-22 12:52:16.000000', 'pOaENBSywGwZ', '2017-06-17 08:57:05.000000',
+        'active', '2016-09-10 08:01:55.000000', '2016-05-11 07:37:47.000000', 'kaspi', 'pWsONLvHPh', 'rXygowRs',
+        1457091558, 'XaURCwOnG', 2322286132796752965, -8553663319613799013, 6880437991581954865,
+        'OiDgwLOkdGoznRNtKncbwzBrXotS', 'jCZqAognEvxIhktaFBuADImpT', -19724251, '2014-12-31 05:59:48.000000', true,
+        540699375, 204112966, -1991554936),
+       (6258160588867962917, '2016-10-14 08:08:31.000000', 'nKXioVHIvXp', '2', '2012-07-08 03:01:16.000000',
+        'unblocked', 'EfPHzZFYCCcIhXaEB', '2020-09-22 12:52:16.000000', 'pOaENBSywGwZ', '2017-06-17 08:57:05.000000',
+        'active', '2016-09-10 08:01:55.000000', '2016-05-11 07:37:47.000000', 'tinkoff', 'pWsONLvHPh', 'rXygowRs',
+        1457091558, 'XaURCwOnG', 2322286132796752965, -8553663319613799013, 6880437991581954865,
+        'OiDgwLOkdGoznRNtKncbwzBrXotS', 'jCZqAognEvxIhktaFBuADImpT', -19724251, '2014-12-31 05:59:48.000000', true,
+        540699375, 204112965, -1991554936);
