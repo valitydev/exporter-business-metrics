@@ -5,9 +5,6 @@ import dev.vality.exporter.businessmetrics.metrics.PaymentsGaugeMetrics;
 import dev.vality.exporter.businessmetrics.model.CustomTag;
 import dev.vality.exporter.businessmetrics.model.PaymentStatus;
 import io.micrometer.core.instrument.Tags;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,29 +18,19 @@ public class PaymentsWithPendingStatusByProviderAndTerminalGaugeMetrics implemen
     public Map<Tags, Double> aggregate(List<PaymentDto> values) {
         return values.stream()
                 .filter(paymentDto -> PaymentStatus.isPendingStatus(paymentDto.getStatus()))
-                .collect(Collectors.groupingBy(this::getPaymentTerminalDto, Collectors.counting()))
+                .collect(Collectors.groupingBy(this::getProviderTerminalDto, Collectors.counting()))
                 .entrySet().stream()
                 .collect(Collectors.toMap(this::getTags, e -> e.getValue().doubleValue()));
     }
 
-    private PaymentTerminalDto getPaymentTerminalDto(PaymentDto p) {
-        return new PaymentTerminalDto(p.getProviderName(), p.getTerminalName());
+    private ProviderTerminalDto getProviderTerminalDto(PaymentDto p) {
+        return new ProviderTerminalDto(p.getProviderName(), p.getTerminalName());
     }
 
-    private Tags getTags(Map.Entry<PaymentTerminalDto, Long> e) {
+    private Tags getTags(Map.Entry<ProviderTerminalDto, Long> e) {
         return Tags.of(
                 CustomTag.provider(e.getKey().getProviderName()),
                 CustomTag.terminal(e.getKey().getTerminalName()),
                 CustomTag.status(PaymentStatus.pending.name()));
-    }
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class PaymentTerminalDto {
-
-        private String providerName;
-        private String terminalName;
-
     }
 }
