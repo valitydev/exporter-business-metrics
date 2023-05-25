@@ -26,7 +26,7 @@ public class PaymentService {
 
     public void registerMetrics(MeterRegistry meterRegistry) {
         var paymentsMetrics = paymentRepository.getPaymentsMetricsByInterval(intervalTime);
-        log.info("Actual payments metrics by {} seconds interval size = {}", intervalTime, paymentsMetrics.size());
+        log.info("Actual payments metrics by {} seconds interval size = {}", intervalTime, paymentsMetrics.toString());
         paymentsMetrics.forEach(dto -> Gauge.builder(Metric.PAYMENTS_COUNT.getName(), dto, getValue())
                 .description(Metric.PAYMENTS_COUNT.getDescription())
                 .baseUnit(Metric.PAYMENTS_COUNT.getUnit())
