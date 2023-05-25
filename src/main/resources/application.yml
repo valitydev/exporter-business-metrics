@@ -42,7 +42,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/newway
+    url: jdbc:postgresql://localhost:5432/daway
     username: postgres
     password: postgres
 

@@ -12,7 +12,7 @@ public class SchedulerRegisterMetricsService {
 
     private final MetricsService metricsService;
 
-    @Scheduled(cron = "${schedule.cron:-}")
+    @Scheduled(cron = "${exporter-business-metrics.cron:-}")
     public void registerMetricsTask() {
         log.info("Start of registration of business metrics in prometheus");
         metricsService.registerMetrics();
