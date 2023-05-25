@@ -1,4 +1,4 @@
-package dev.vality.businessmetricexporter;
+package dev.vality.exporter.businessmetrics;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

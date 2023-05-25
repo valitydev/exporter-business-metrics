@@ -11,7 +11,7 @@ management:
   metrics:
     export:
       prometheus:
-        enabled: false
+        enabled: true
     tags:
       application: '${project.name}'
   endpoint:
@@ -34,6 +34,23 @@ spring:
   output:
     ansi:
       enabled: always
+  jpa:
+    database: postgresql
+    properties:
+      hibernate:
+        default_schema: dw
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/daway
+    username: postgres
+    password: postgres
 
-schedule:
+hibernate:
+  physical_naming_strategy: dev.vality.exporter.businessmetrics.entity.naming.SnakeCaseNamingStrategy
+
+exporter-business-metrics:
   cron: '*/30 * * * * *' #every 30 seconds
+
+interval:
+  time: 30 #seconds
