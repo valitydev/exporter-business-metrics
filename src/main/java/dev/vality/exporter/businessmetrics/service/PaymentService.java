@@ -32,11 +32,13 @@ public class PaymentService {
         int pendingCount = 0;
         int failedCount = 0;
         int capturedCount = 0;
+        int otherStatusCount = 0;
         for (PaymentsMetricDto dto : paymentsMetrics) {
             switch (dto.getStatus()) {
                 case "pending" -> pendingCount++;
                 case "captured" -> capturedCount++;
                 case "failed" -> failedCount++;
+                default -> otherStatusCount++;
             }
             Gauge.builder(Metric.PAYMENTS_COUNT.getName(), dto, getValue())
                     .description(Metric.PAYMENTS_COUNT.getDescription())
@@ -45,7 +47,7 @@ public class PaymentService {
                     .register(meterRegistry);
         }
         log.info("Actual payments metrics have been registered to 'prometheus', " +
-                "pendingCount = {}, failedCount = {}, capturedCount = {}", pendingCount, failedCount, capturedCount);
+                "pendingCount = {}, failedCount = {}, capturedCount = {}, otherStatusCount = {}", pendingCount, failedCount, capturedCount, otherStatusCount);
     }
 
     private ToDoubleFunction<PaymentsMetricDto> getValue() {
