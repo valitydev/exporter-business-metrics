@@ -49,7 +49,7 @@ spring:
 hibernate:
   physical_naming_strategy: dev.vality.businessmetricexporter.entity.naming.SnakeCaseNamingStrategy
 
-schedule:
+exporter-business-metrics:
   cron: '*/30 * * * * *' #every 30 seconds
 
 interval:
