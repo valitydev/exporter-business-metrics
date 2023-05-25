@@ -37,6 +37,7 @@ import javax.persistence.*;
                                                                          inner join dw.payment_route as pr
                                                                                     on p2.invoice_id = pr.invoice_id and
                                                                                        p2.payment_id = pr.payment_id and
+                                                                                       pr.route_provider_id not in (1) and
                                                                                        pr.current)
                                                     select p3.*,
                                                            p.name as provider_name
@@ -79,9 +80,9 @@ import javax.persistence.*;
                          issuer_bank,
                          status
                 """,
-        resultSetMapping = "PaymentsMetricDto")
+        resultSetMapping = "PaymentsMetricDtoList")
 @SqlResultSetMapping(
-        name = "PaymentsMetricDto",
+        name = "PaymentsMetricDtoList",
         classes = @ConstructorResult(
                 targetClass = PaymentsMetricDto.class,
                 columns = {

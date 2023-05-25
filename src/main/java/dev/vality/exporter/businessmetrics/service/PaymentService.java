@@ -17,6 +17,7 @@ import java.util.function.ToDoubleFunction;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@SuppressWarnings("LineLength")
 public class PaymentService {
 
     @Value("${interval.time}")
@@ -26,12 +27,25 @@ public class PaymentService {
 
     public void registerMetrics(MeterRegistry meterRegistry) {
         var paymentsMetrics = paymentRepository.getPaymentsMetricsByInterval(intervalTime);
-        log.info("Actual payments metrics by {} seconds interval size = {}", intervalTime, paymentsMetrics.toString());
-        paymentsMetrics.forEach(dto -> Gauge.builder(Metric.PAYMENTS_COUNT.getName(), dto, getValue())
-                .description(Metric.PAYMENTS_COUNT.getDescription())
-                .baseUnit(Metric.PAYMENTS_COUNT.getUnit())
-                .tags(getTags(dto))
-                .register(meterRegistry));
+        log.info("Actual payments metrics have been got from 'daway' db, " +
+                "interval = {}, count = {}", intervalTime, paymentsMetrics.size());
+        int pendingCount = 0;
+        int failedCount = 0;
+        int capturedCount = 0;
+        for (PaymentsMetricDto dto : paymentsMetrics) {
+            switch (dto.getStatus()) {
+                case "pending" -> pendingCount++;
+                case "captured" -> capturedCount++;
+                case "failed" -> failedCount++;
+            }
+            Gauge.builder(Metric.PAYMENTS_COUNT.getName(), dto, getValue())
+                    .description(Metric.PAYMENTS_COUNT.getDescription())
+                    .baseUnit(Metric.PAYMENTS_COUNT.getUnit())
+                    .tags(getTags(dto))
+                    .register(meterRegistry);
+        }
+        log.info("Actual payments metrics have been registered to 'prometheus', " +
+                "pendingCount = {}, failedCount = {}, capturedCount = {}", pendingCount, failedCount, capturedCount);
     }
 
     private ToDoubleFunction<PaymentsMetricDto> getValue() {
