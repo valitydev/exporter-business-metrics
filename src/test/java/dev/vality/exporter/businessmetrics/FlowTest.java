@@ -29,6 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = {"exporter-business-metrics.cron=-", //disables scheduled execution
                 "management.server.port="})
+@SuppressWarnings("LineLength")
 public class FlowTest {
 
     @MockBean
