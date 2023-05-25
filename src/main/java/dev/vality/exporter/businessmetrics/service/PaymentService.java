@@ -4,15 +4,16 @@ import dev.vality.exporter.businessmetrics.entity.PaymentsMetricDto;
 import dev.vality.exporter.businessmetrics.model.CustomTag;
 import dev.vality.exporter.businessmetrics.model.Metric;
 import dev.vality.exporter.businessmetrics.repository.PaymentRepository;
-import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.MultiGauge;
 import io.micrometer.core.instrument.Tags;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.function.ToDoubleFunction;
+import java.util.concurrent.atomic.LongAdder;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,34 +25,35 @@ public class PaymentService {
     private String intervalTime;
 
     private final PaymentRepository paymentRepository;
+    private final MultiGauge multiGaugePaymentsCount;
+    private final MeterRegistry meterRegistry;
 
-    public void registerMetrics(MeterRegistry meterRegistry) {
+    public void registerMetrics() {
         var paymentsMetrics = paymentRepository.getPaymentsMetricsByInterval(intervalTime);
         log.info("Actual payments metrics have been got from 'daway' db, " +
                 "interval = {}, count = {}", intervalTime, paymentsMetrics.size());
-        int pendingCount = 0;
-        int failedCount = 0;
-        int capturedCount = 0;
-        int otherStatusCount = 0;
-        for (PaymentsMetricDto dto : paymentsMetrics) {
-            switch (dto.getStatus()) {
-                case "pending" -> pendingCount++;
-                case "captured" -> capturedCount++;
-                case "failed" -> failedCount++;
-                default -> otherStatusCount++;
-            }
-            Gauge.builder(Metric.PAYMENTS_COUNT.getName(), dto, getValue())
-                    .description(Metric.PAYMENTS_COUNT.getDescription())
-                    .baseUnit(Metric.PAYMENTS_COUNT.getUnit())
-                    .tags(getTags(dto))
-                    .register(meterRegistry);
-        }
+        final var pendingCount = new LongAdder();
+        final var failedCount = new LongAdder();
+        final var capturedCount = new LongAdder();
+        final var otherStatusCount = new LongAdder();
+        var rows = paymentsMetrics.stream()
+                .peek(dto -> {
+                    switch (dto.getStatus()) {
+                        case "pending" -> pendingCount.increment();
+                        case "captured" -> capturedCount.increment();
+                        case "failed" -> failedCount.increment();
+                        default -> otherStatusCount.increment();
+                    }
+                })
+                .map(dto -> {
+                    final var value = Double.parseDouble(dto.getCount());
+                    return MultiGauge.Row.of(getTags(dto), this, o -> value);
+                })
+                .collect(Collectors.<MultiGauge.Row<?>>toList());
+        multiGaugePaymentsCount.register(rows, true);
+        var registeredMetricsSize = meterRegistry.get(Metric.PAYMENTS_COUNT.getName()).gauges().size();
         log.info("Actual payments metrics have been registered to 'prometheus', " +
-                "pendingCount = {}, failedCount = {}, capturedCount = {}, otherStatusCount = {}", pendingCount, failedCount, capturedCount, otherStatusCount);
-    }
-
-    private ToDoubleFunction<PaymentsMetricDto> getValue() {
-        return dto -> Double.parseDouble(dto.getCount());
+                "registeredMetricsSize = {}, pendingCount = {}, failedCount = {}, capturedCount = {}, otherStatusCount = {}", registeredMetricsSize, pendingCount, failedCount, capturedCount, otherStatusCount);
     }
 
     private Tags getTags(PaymentsMetricDto dto) {

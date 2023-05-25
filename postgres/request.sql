@@ -11,7 +11,7 @@ with p6 as (with p5 as (with p4 as (with p3 as (with p2 as (with p1 as (select p
                                                                                                p.payment_id =
                                                                                                psi.payment_id and
                                                                                                psi.current
-                                                                        where p.event_created_at > now() - interval '60 second')
+                                                                        where p.event_created_at > now() - interval '30 second')
                                                             select p1.*,
                                                                    coalesce(ppi.issuer_country, 'undefined') as issuer_country,
                                                                    coalesce(ppi.bank_name, 'undefined')      as issuer_bank
@@ -26,6 +26,7 @@ with p6 as (with p5 as (with p4 as (with p3 as (with p2 as (with p1 as (select p
                                                          inner join dw.payment_route as pr
                                                                     on p2.invoice_id = pr.invoice_id and
                                                                        p2.payment_id = pr.payment_id and
+                                                                       pr.route_provider_id not in (1) and
                                                                        pr.current)
                                     select p3.*,
                                            p.name as provider_name
@@ -55,7 +56,7 @@ select provider_id,
        issuer_country,
        issuer_bank,
        status,
-       count(status) as count
+       count(status)
 from p6
 group by provider_id,
          provider_name,
