@@ -12,6 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 
@@ -29,7 +32,7 @@ public class PaymentService {
     private final MeterRegistry meterRegistry;
 
     public void registerMetrics() {
-        var paymentsMetrics = paymentRepository.getPaymentsMetricsByInterval(intervalTime);
+        var paymentsMetrics = paymentRepository.getPaymentsMetricsByInterval(getStartPeriodDate());
         log.info("Actual payments metrics have been got from 'daway' db, " +
                 "interval = {}, count = {}", intervalTime, paymentsMetrics.size());
         final var pendingCount = new LongAdder();
@@ -54,6 +57,10 @@ public class PaymentService {
         var registeredMetricsSize = meterRegistry.get(Metric.PAYMENTS_COUNT.getName()).gauges().size();
         log.info("Actual payments metrics have been registered to 'prometheus', " +
                 "registeredMetricsSize = {}, pendingCount = {}, failedCount = {}, capturedCount = {}, otherStatusCount = {}", registeredMetricsSize, pendingCount, failedCount, capturedCount, otherStatusCount);
+    }
+
+    private LocalDateTime getStartPeriodDate() {
+        return LocalDateTime.now(ZoneOffset.UTC).minus(Long.parseLong(intervalTime), ChronoUnit.SECONDS);
     }
 
     private Tags getTags(PaymentsMetricDto dto) {
