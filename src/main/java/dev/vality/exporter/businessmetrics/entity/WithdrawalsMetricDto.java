@@ -10,8 +10,8 @@ import javax.persistence.*;
         name = "getWithdrawalsMetricsByInterval",
         query = """
                 with w4 as (with w3 as (with w2 as (with w1 as (select w.wallet_id,
-                                                                       coalesce(w.provider_id, -1)   as provider_id,
-                                                                       coalesce(w.terminal_id, '-1') as terminal_id,
+                                                                       coalesce(w.provider_id, -1)                    as provider_id,
+                                                                       cast(coalesce(w.terminal_id, '-1') as integer) as terminal_id,
                                                                        w.currency_code,
                                                                        w.withdrawal_status
                                                                 from dw.withdrawal as w
@@ -27,7 +27,7 @@ import javax.persistence.*;
                                                t.name as terminal_name
                                         from w2
                                                  inner join dw.terminal as t
-                                                            on w2.terminal_id = t.terminal_ref_id::varchar and
+                                                            on w2.terminal_id = t.terminal_ref_id and
                                                                t.current)
                             select w3.*,
                                    w.wallet_name as wallet_name

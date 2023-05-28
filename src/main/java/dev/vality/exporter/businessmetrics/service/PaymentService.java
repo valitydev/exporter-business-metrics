@@ -4,7 +4,6 @@ import dev.vality.exporter.businessmetrics.entity.PaymentsMetricDto;
 import dev.vality.exporter.businessmetrics.model.CustomTag;
 import dev.vality.exporter.businessmetrics.model.Metric;
 import dev.vality.exporter.businessmetrics.repository.PaymentRepository;
-import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.MultiGauge;
 import io.micrometer.core.instrument.Tags;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,7 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final MultiGauge multiGaugePaymentsCount;
-    private final MeterRegistry meterRegistry;
+    private final MeterRegistryService meterRegistryService;
 
     public void registerMetrics() {
         var metrics = paymentRepository.getPaymentsMetricsByInterval(getStartPeriodDate());
@@ -54,7 +53,7 @@ public class PaymentService {
                 })
                 .collect(Collectors.<MultiGauge.Row<?>>toList());
         multiGaugePaymentsCount.register(rows, true);
-        var registeredMetricsSize = meterRegistry.get(Metric.PAYMENTS_COUNT.getName()).gauges().size();
+        var registeredMetricsSize = meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_COUNT.getName());
         log.info("Actual payments metrics have been registered to 'prometheus', " +
                 "registeredMetricsSize = {}, pendingCount = {}, failedCount = {}, capturedCount = {}, otherStatusCount = {}", registeredMetricsSize, pendingCount, failedCount, capturedCount, otherStatusCount);
     }
