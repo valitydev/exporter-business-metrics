@@ -32,7 +32,7 @@ public class PaymentService {
 
     public void registerMetrics() {
         var metrics = paymentRepository.getPaymentsMetricsByInterval(getStartPeriodDate());
-        log.info("Actual payments metrics have been got from 'daway' db, " +
+        log.debug("Actual payments metrics have been got from 'daway' db, " +
                 "interval = {}, count = {}", intervalTime, metrics.size());
         final var pendingCount = new LongAdder();
         final var failedCount = new LongAdder();

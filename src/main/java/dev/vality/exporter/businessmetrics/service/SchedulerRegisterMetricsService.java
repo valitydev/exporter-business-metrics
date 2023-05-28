@@ -14,8 +14,8 @@ public class SchedulerRegisterMetricsService {
 
     @Scheduled(cron = "${exporter-business-metrics.cron:-}")
     public void registerMetricsTask() {
-        log.info("Start of registration of business metrics in prometheus");
+        log.debug("Start of registration of business metrics in prometheus");
         metricsService.registerMetrics();
-        log.info("Finished of registration of business metrics in prometheus");
+        log.debug("Finished of registration of business metrics in prometheus");
     }
 }

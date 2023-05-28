@@ -32,7 +32,7 @@ public class WithdrawalService {
 
     public void registerMetrics() {
         var metrics = withdrawalRepository.getWithdrawalsMetricsByInterval(getStartPeriodDate());
-        log.info("Actual withdrawal metrics have been got from 'daway' db, " +
+        log.debug("Actual withdrawal metrics have been got from 'daway' db, " +
                 "interval = {}, count = {}", intervalTime, metrics.size());
         final var pendingCount = new LongAdder();
         final var failedCount = new LongAdder();
