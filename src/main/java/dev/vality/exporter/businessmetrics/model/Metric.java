@@ -9,6 +9,11 @@ public enum Metric {
     PAYMENTS_COUNT(
             formatWithPrefix("payments"),
             "Payments count since last scrape",
+            "count"),
+
+    WITHDRAWALS_COUNT(
+            formatWithPrefix("withdrawals"),
+            "Withdrawals count since last scrape",
             "count");
 
     @Getter

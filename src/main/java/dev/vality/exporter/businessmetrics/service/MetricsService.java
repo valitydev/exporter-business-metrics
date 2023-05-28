@@ -10,12 +10,10 @@ import org.springframework.stereotype.Service;
 public class MetricsService {
 
     private final PaymentService paymentService;
+    private final WithdrawalService withdrawalService;
 
     public void registerMetrics() {
-        registerPaymentsMetrics();
-    }
-
-    private void registerPaymentsMetrics() {
         paymentService.registerMetrics();
+        withdrawalService.registerMetrics();
     }
 }

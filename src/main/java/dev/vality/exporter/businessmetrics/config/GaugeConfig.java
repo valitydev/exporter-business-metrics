@@ -16,4 +16,12 @@ public class GaugeConfig {
                 .baseUnit(Metric.PAYMENTS_COUNT.getUnit())
                 .register(meterRegistry);
     }
+
+    @Bean
+    public MultiGauge multiGaugeWithdrawalsCount(MeterRegistry meterRegistry) {
+        return MultiGauge.builder(Metric.WITHDRAWALS_COUNT.getName())
+                .description(Metric.WITHDRAWALS_COUNT.getDescription())
+                .baseUnit(Metric.WITHDRAWALS_COUNT.getUnit())
+                .register(meterRegistry);
+    }
 }

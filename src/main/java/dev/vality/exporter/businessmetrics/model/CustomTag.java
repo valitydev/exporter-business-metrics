@@ -17,6 +17,8 @@ public class CustomTag {
     public static final String BANK_TAG = "issuer_bank";
     public static final String BANK_CARD_PAYMENT_SYSTEM_TAG = "issuer_bank_card_payment_system";
     public static final String STATUS_TAG = "status";
+    public static final String WALLET_ID_TAG = "wallet_id";
+    public static final String WALLET_NAME_TAG = "wallet_name";
 
     public static Tag providerId(String providerId) {
         return Tag.of(PROVIDER_ID_TAG, providerId);
@@ -60,5 +62,13 @@ public class CustomTag {
 
     public static Tag status(String status) {
         return Tag.of(STATUS_TAG, status);
+    }
+
+    public static Tag walletId(String walletId) {
+        return Tag.of(WALLET_ID_TAG, walletId);
+    }
+
+    public static Tag walletName(String walletName) {
+        return Tag.of(WALLET_NAME_TAG, walletName);
     }
 }

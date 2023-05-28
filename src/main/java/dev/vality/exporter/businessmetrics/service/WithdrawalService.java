@@ -1,9 +1,9 @@
 package dev.vality.exporter.businessmetrics.service;
 
-import dev.vality.exporter.businessmetrics.entity.PaymentsMetricDto;
+import dev.vality.exporter.businessmetrics.entity.WithdrawalsMetricDto;
 import dev.vality.exporter.businessmetrics.model.CustomTag;
 import dev.vality.exporter.businessmetrics.model.Metric;
-import dev.vality.exporter.businessmetrics.repository.PaymentRepository;
+import dev.vality.exporter.businessmetrics.repository.WithdrawalRepository;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.MultiGauge;
 import io.micrometer.core.instrument.Tags;
@@ -22,28 +22,28 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @SuppressWarnings("LineLength")
-public class PaymentService {
+public class WithdrawalService {
 
     @Value("${interval.time}")
     private String intervalTime;
 
-    private final PaymentRepository paymentRepository;
-    private final MultiGauge multiGaugePaymentsCount;
+    private final WithdrawalRepository withdrawalRepository;
+    private final MultiGauge multiGaugeWithdrawalsCount;
     private final MeterRegistry meterRegistry;
 
     public void registerMetrics() {
-        var metrics = paymentRepository.getPaymentsMetricsByInterval(getStartPeriodDate());
-        log.info("Actual payments metrics have been got from 'daway' db, " +
+        var metrics = withdrawalRepository.getWithdrawalsMetricsByInterval(getStartPeriodDate());
+        log.info("Actual withdrawal metrics have been got from 'daway' db, " +
                 "interval = {}, count = {}", intervalTime, metrics.size());
         final var pendingCount = new LongAdder();
         final var failedCount = new LongAdder();
-        final var capturedCount = new LongAdder();
+        final var succeededCount = new LongAdder();
         final var otherStatusCount = new LongAdder();
         var rows = metrics.stream()
                 .peek(dto -> {
                     switch (dto.getStatus()) {
                         case "pending" -> pendingCount.increment();
-                        case "captured" -> capturedCount.increment();
+                        case "succeeded" -> succeededCount.increment();
                         case "failed" -> failedCount.increment();
                         default -> otherStatusCount.increment();
                     }
@@ -53,28 +53,25 @@ public class PaymentService {
                     return MultiGauge.Row.of(getTags(dto), this, o -> value);
                 })
                 .collect(Collectors.<MultiGauge.Row<?>>toList());
-        multiGaugePaymentsCount.register(rows, true);
-        var registeredMetricsSize = meterRegistry.get(Metric.PAYMENTS_COUNT.getName()).gauges().size();
-        log.info("Actual payments metrics have been registered to 'prometheus', " +
-                "registeredMetricsSize = {}, pendingCount = {}, failedCount = {}, capturedCount = {}, otherStatusCount = {}", registeredMetricsSize, pendingCount, failedCount, capturedCount, otherStatusCount);
+        multiGaugeWithdrawalsCount.register(rows, true);
+        var registeredMetricsSize = meterRegistry.get(Metric.WITHDRAWALS_COUNT.getName()).gauges().size();
+        log.info("Actual withdrawal metrics have been registered to 'prometheus', " +
+                "registeredMetricsSize = {}, pendingCount = {}, failedCount = {}, succeededCount = {}, otherStatusCount = {}", registeredMetricsSize, pendingCount, failedCount, succeededCount, otherStatusCount);
     }
 
     private LocalDateTime getStartPeriodDate() {
         return LocalDateTime.now(ZoneOffset.UTC).minus(Long.parseLong(intervalTime), ChronoUnit.SECONDS);
     }
 
-    private Tags getTags(PaymentsMetricDto dto) {
+    private Tags getTags(WithdrawalsMetricDto dto) {
         return Tags.of(
                 CustomTag.providerId(dto.getProviderId()),
                 CustomTag.providerName(dto.getProviderName()),
                 CustomTag.terminalId(dto.getTerminalId()),
                 CustomTag.terminalName(dto.getTerminalName()),
-                CustomTag.shopId(dto.getShopId()),
-                CustomTag.shopName(dto.getShopName()),
+                CustomTag.walletId(dto.getWalletId()),
+                CustomTag.walletName(dto.getWalletName()),
                 CustomTag.currency(dto.getCurrencyCode()),
-                CustomTag.issuerCountry(dto.getIssuerCountry()),
-                CustomTag.issuerBank(dto.getIssuerBank()),
-                CustomTag.issuerBankCardPaymentSystem(dto.getIssuerBankCardPaymentSystem()),
                 CustomTag.status(dto.getStatus()));
     }
 }
