@@ -74,6 +74,7 @@ public class PaymentService {
                 CustomTag.currency(dto.getCurrencyCode()),
                 CustomTag.issuerCountry(dto.getIssuerCountry()),
                 CustomTag.issuerBank(dto.getIssuerBank()),
+                CustomTag.issuerBankCardPaymentSystem(dto.getIssuerBankCardPaymentSystem()),
                 CustomTag.status(dto.getStatus()));
     }
 }

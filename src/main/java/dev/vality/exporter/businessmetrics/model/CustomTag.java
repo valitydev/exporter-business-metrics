@@ -15,6 +15,7 @@ public class CustomTag {
     public static final String CURRENCY_TAG = "currency";
     public static final String COUNTRY_TAG = "issuer_country";
     public static final String BANK_TAG = "issuer_bank";
+    public static final String BANK_CARD_PAYMENT_SYSTEM_TAG = "issuer_bank_card_payment_system";
     public static final String STATUS_TAG = "status";
 
     public static Tag providerId(String providerId) {
@@ -51,6 +52,10 @@ public class CustomTag {
 
     public static Tag issuerBank(String bank) {
         return Tag.of(BANK_TAG, bank);
+    }
+
+    public static Tag issuerBankCardPaymentSystem(String issuerBankCardPaymentSystem) {
+        return Tag.of(BANK_CARD_PAYMENT_SYSTEM_TAG, issuerBankCardPaymentSystem);
     }
 
     public static Tag status(String status) {

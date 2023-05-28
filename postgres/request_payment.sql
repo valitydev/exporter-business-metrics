@@ -13,8 +13,9 @@ with p6 as (with p5 as (with p4 as (with p3 as (with p2 as (with p1 as (select p
                                                                                                psi.current
                                                                         where p.event_created_at > now() - interval '30 second')
                                                             select p1.*,
-                                                                   coalesce(ppi.issuer_country, 'undefined') as issuer_country,
-                                                                   coalesce(ppi.bank_name, 'undefined')      as issuer_bank
+                                                                   coalesce(ppi.issuer_country, 'undefined')           as issuer_country,
+                                                                   coalesce(ppi.bank_name, 'undefined')                as issuer_bank,
+                                                                   coalesce(ppi.bank_card_payment_system, 'undefined') as issuer_bank_card_payment_system
                                                             from p1
                                                                      left join dw.payment_payer_info as ppi
                                                                                on p1.invoice_id = ppi.invoice_id and
@@ -55,6 +56,7 @@ select provider_id,
        currency_code,
        issuer_country,
        issuer_bank,
+       issuer_bank_card_payment_system,
        status,
        count(status)
 from p6
@@ -67,4 +69,5 @@ group by provider_id,
          currency_code,
          issuer_country,
          issuer_bank,
+         issuer_bank_card_payment_system,
          status

@@ -24,8 +24,9 @@ import javax.persistence.*;
                                                                                                                psi.current
                                                                                         where p.event_created_at > :startPeriodDate)
                                                                             select p1.*,
-                                                                                   coalesce(ppi.issuer_country, 'undefined') as issuer_country,
-                                                                                   coalesce(ppi.bank_name, 'undefined')      as issuer_bank
+                                                                                   coalesce(ppi.issuer_country, 'undefined')           as issuer_country,
+                                                                                   coalesce(ppi.bank_name, 'undefined')                as issuer_bank,
+                                                                                   coalesce(ppi.bank_card_payment_system, 'undefined') as issuer_bank_card_payment_system
                                                                             from p1
                                                                                      left join dw.payment_payer_info as ppi
                                                                                                on p1.invoice_id = ppi.invoice_id and
@@ -66,6 +67,7 @@ import javax.persistence.*;
                        currency_code as currencyCode,
                        issuer_country as issuerCountry,
                        issuer_bank as issuerBank,
+                       issuer_bank_card_payment_system as issuerBankCardPaymentSystem,
                        status,
                        count(status) as count
                 from p6
@@ -78,6 +80,7 @@ import javax.persistence.*;
                          currency_code,
                          issuer_country,
                          issuer_bank,
+                         issuer_bank_card_payment_system,
                          status
                 """,
         resultSetMapping = "PaymentsMetricDtoList")
@@ -95,6 +98,7 @@ import javax.persistence.*;
                         @ColumnResult(name = "currencyCode", type = String.class),
                         @ColumnResult(name = "issuerCountry", type = String.class),
                         @ColumnResult(name = "issuerBank", type = String.class),
+                        @ColumnResult(name = "issuerBankCardPaymentSystem", type = String.class),
                         @ColumnResult(name = "status", type = String.class),
                         @ColumnResult(name = "count", type = String.class)}))
 @SuppressWarnings("LineLength")
@@ -111,13 +115,14 @@ public class PaymentsMetricDto {
     private String currencyCode;
     private String issuerCountry;
     private String issuerBank;
+    private String issuerBankCardPaymentSystem;
     private String status;
     private String count;
 
     public PaymentsMetricDto() {
     }
 
-    public PaymentsMetricDto(String providerId, String providerName, String terminalId, String terminalName, String shopId, String shopName, String currencyCode, String issuerCountry, String issuerBank, String status, String count) {
+    public PaymentsMetricDto(String providerId, String providerName, String terminalId, String terminalName, String shopId, String shopName, String currencyCode, String issuerCountry, String issuerBank, String issuerBankCardPaymentSystem, String status, String count) {
         this.providerId = providerId;
         this.providerName = providerName;
         this.terminalId = terminalId;
@@ -127,6 +132,7 @@ public class PaymentsMetricDto {
         this.currencyCode = currencyCode;
         this.issuerCountry = issuerCountry;
         this.issuerBank = issuerBank;
+        this.issuerBankCardPaymentSystem = issuerBankCardPaymentSystem;
         this.status = status;
         this.count = count;
     }
