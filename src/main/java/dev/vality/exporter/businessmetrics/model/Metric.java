@@ -7,14 +7,24 @@ import lombok.RequiredArgsConstructor;
 public enum Metric {
 
     PAYMENTS_COUNT(
-            formatWithPrefix("payments"),
+            formatWithPrefix("payments_count"),
             "Payments count since last scrape",
-            "count"),
+            "units"),
 
     WITHDRAWALS_COUNT(
-            formatWithPrefix("withdrawals"),
+            formatWithPrefix("withdrawals_count"),
             "Withdrawals count since last scrape",
-            "count");
+            "units"),
+
+    PAYMENTS_AMOUNT(
+            formatWithPrefix("payments_amount"),
+            "Payments amount since last scrape",
+            "units"),
+
+    WITHDRAWALS_AMOUNT(
+            formatWithPrefix("withdrawals_amount"),
+            "Withdrawals amount since last scrape",
+            "units");
 
     @Getter
     private final String name;

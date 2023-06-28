@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 
@@ -23,11 +24,15 @@ import java.util.stream.Collectors;
 @SuppressWarnings("LineLength")
 public class PaymentService {
 
+    private static final String PAYMENTS_COUNT = Metric.PAYMENTS_COUNT.getName() + Metric.PAYMENTS_COUNT.getUnit();
+    private static final String PAYMENTS_AMOUNT = Metric.PAYMENTS_AMOUNT.getName() + Metric.PAYMENTS_AMOUNT.getUnit();
+
     @Value("${interval.time}")
     private String intervalTime;
 
     private final PaymentRepository paymentRepository;
     private final MultiGauge multiGaugePaymentsCount;
+    private final MultiGauge multiGaugePaymentsAmount;
     private final MeterRegistryService meterRegistryService;
 
     public void registerMetrics() {
@@ -47,13 +52,22 @@ public class PaymentService {
                         default -> otherStatusCount.increment();
                     }
                 })
-                .map(dto -> {
-                    final var value = Double.parseDouble(dto.getCount());
-                    return MultiGauge.Row.of(getTags(dto), this, o -> value);
+                .flatMap(dto -> {
+                    final var count = Double.parseDouble(dto.getCount());
+                    final var amount = Double.parseDouble(dto.getAmount());
+                    return Map.of(
+                            PAYMENTS_COUNT, MultiGauge.Row.of(getTags(dto), this, o -> count),
+                            PAYMENTS_AMOUNT, MultiGauge.Row.of(getTags(dto), this, o -> amount)).entrySet().stream();
                 })
-                .collect(Collectors.<MultiGauge.Row<?>>toList());
-        multiGaugePaymentsCount.register(rows, true);
-        var registeredMetricsSize = meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_COUNT.getName());
+                .collect(
+                        Collectors.groupingBy(
+                                Map.Entry::getKey,
+                                Collectors.mapping(
+                                        Map.Entry::getValue,
+                                        Collectors.<MultiGauge.Row<?>>toList())));
+        multiGaugePaymentsCount.register(rows.get(PAYMENTS_COUNT), true);
+        multiGaugePaymentsAmount.register(rows.get(PAYMENTS_AMOUNT), true);
+        var registeredMetricsSize = meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_COUNT.getName()) + meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_AMOUNT.getName());
         log.info("Actual payments metrics have been registered to 'prometheus', " +
                 "registeredMetricsSize = {}, pendingCount = {}, failedCount = {}, capturedCount = {}, otherStatusCount = {}", registeredMetricsSize, pendingCount, failedCount, capturedCount, otherStatusCount);
     }

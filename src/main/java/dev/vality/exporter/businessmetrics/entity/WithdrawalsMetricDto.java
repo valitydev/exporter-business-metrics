@@ -13,7 +13,8 @@ import javax.persistence.*;
                                                                        coalesce(w.provider_id, -1)                    as provider_id,
                                                                        cast(coalesce(w.terminal_id, '-1') as integer) as terminal_id,
                                                                        w.currency_code,
-                                                                       w.withdrawal_status
+                                                                       w.withdrawal_status,
+                                                                       w.amount
                                                                 from dw.withdrawal as w
                                                                 where w.event_created_at > :startPeriodDate
                                                                   and w.current)
@@ -43,7 +44,8 @@ import javax.persistence.*;
                        wallet_name as walletName,
                        currency_code as currencyCode,
                        withdrawal_status as status,
-                       count(withdrawal_status) as count
+                       count(withdrawal_status) as count,
+                       sum(amount) as amount
                 from w4
                 group by provider_id,
                          provider_name,
@@ -68,7 +70,8 @@ import javax.persistence.*;
                         @ColumnResult(name = "walletName", type = String.class),
                         @ColumnResult(name = "currencyCode", type = String.class),
                         @ColumnResult(name = "status", type = String.class),
-                        @ColumnResult(name = "count", type = String.class)}))
+                        @ColumnResult(name = "count", type = String.class),
+                        @ColumnResult(name = "amount", type = String.class)}))
 @SuppressWarnings("LineLength")
 public class WithdrawalsMetricDto {
 
@@ -83,11 +86,12 @@ public class WithdrawalsMetricDto {
     private String currencyCode;
     private String status;
     private String count;
+    private String amount;
 
     public WithdrawalsMetricDto() {
     }
 
-    public WithdrawalsMetricDto(String providerId, String providerName, String terminalId, String terminalName, String walletId, String walletName, String currencyCode, String status, String count) {
+    public WithdrawalsMetricDto(String providerId, String providerName, String terminalId, String terminalName, String walletId, String walletName, String currencyCode, String status, String count, String amount) {
         this.providerId = providerId;
         this.providerName = providerName;
         this.terminalId = terminalId;
@@ -97,5 +101,6 @@ public class WithdrawalsMetricDto {
         this.currencyCode = currencyCode;
         this.status = status;
         this.count = count;
+        this.amount = amount;
     }
 }

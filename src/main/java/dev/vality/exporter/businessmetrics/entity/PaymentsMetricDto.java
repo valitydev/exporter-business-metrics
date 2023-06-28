@@ -14,6 +14,7 @@ import javax.persistence.*;
                                                                                                p.party_id,
                                                                                                p.shop_id,
                                                                                                p.currency_code,
+                                                                                               p.amount,
                                                                                                psi.status
                                                                                         from dw.payment as p
                                                                                                  inner join dw.payment_status_info as psi
@@ -69,7 +70,8 @@ import javax.persistence.*;
                        issuer_bank as issuerBank,
                        issuer_bank_card_payment_system as issuerBankCardPaymentSystem,
                        status,
-                       count(status) as count
+                       count(status) as count,
+                       sum(amount) as amount
                 from p6
                 group by provider_id,
                          provider_name,
@@ -100,7 +102,8 @@ import javax.persistence.*;
                         @ColumnResult(name = "issuerBank", type = String.class),
                         @ColumnResult(name = "issuerBankCardPaymentSystem", type = String.class),
                         @ColumnResult(name = "status", type = String.class),
-                        @ColumnResult(name = "count", type = String.class)}))
+                        @ColumnResult(name = "count", type = String.class),
+                        @ColumnResult(name = "amount", type = String.class)}))
 @SuppressWarnings("LineLength")
 public class PaymentsMetricDto {
 
@@ -118,11 +121,12 @@ public class PaymentsMetricDto {
     private String issuerBankCardPaymentSystem;
     private String status;
     private String count;
+    private String amount;
 
     public PaymentsMetricDto() {
     }
 
-    public PaymentsMetricDto(String providerId, String providerName, String terminalId, String terminalName, String shopId, String shopName, String currencyCode, String issuerCountry, String issuerBank, String issuerBankCardPaymentSystem, String status, String count) {
+    public PaymentsMetricDto(String providerId, String providerName, String terminalId, String terminalName, String shopId, String shopName, String currencyCode, String issuerCountry, String issuerBank, String issuerBankCardPaymentSystem, String status, String count, String amount) {
         this.providerId = providerId;
         this.providerName = providerName;
         this.terminalId = terminalId;
@@ -135,5 +139,6 @@ public class PaymentsMetricDto {
         this.issuerBankCardPaymentSystem = issuerBankCardPaymentSystem;
         this.status = status;
         this.count = count;
+        this.amount = amount;
     }
 }
