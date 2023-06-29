@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 @SuppressWarnings("LineLength")
 public class PaymentService {
 
-    private static final String PAYMENTS_COUNT = Metric.PAYMENTS_COUNT.getName() + Metric.PAYMENTS_COUNT.getUnit();
-    private static final String PAYMENTS_AMOUNT = Metric.PAYMENTS_AMOUNT.getName() + Metric.PAYMENTS_AMOUNT.getUnit();
+    private static final String PAYMENTS_COUNT = Metric.PAYMENTS_COUNT.getName();
+    private static final String PAYMENTS_AMOUNT = Metric.PAYMENTS_AMOUNT.getName();
 
     @Value("${interval.time}")
     private String intervalTime;

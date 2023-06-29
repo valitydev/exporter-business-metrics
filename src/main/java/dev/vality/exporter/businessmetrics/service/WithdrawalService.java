@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 @SuppressWarnings("LineLength")
 public class WithdrawalService {
 
-    private static final String WITHDRAWALS_COUNT = Metric.WITHDRAWALS_COUNT.getName() + Metric.WITHDRAWALS_COUNT.getUnit();
-    private static final String WITHDRAWALS_AMOUNT = Metric.WITHDRAWALS_AMOUNT.getName() + Metric.WITHDRAWALS_AMOUNT.getUnit();
+    private static final String WITHDRAWALS_COUNT = Metric.WITHDRAWALS_COUNT.getName();
+    private static final String WITHDRAWALS_AMOUNT = Metric.WITHDRAWALS_AMOUNT.getName();
 
     @Value("${interval.time}")
     private String intervalTime;
