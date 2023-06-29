@@ -13,7 +13,6 @@ public class GaugeConfig {
     public MultiGauge multiGaugePaymentsCount(MeterRegistry meterRegistry) {
         return MultiGauge.builder(Metric.PAYMENTS_COUNT.getName())
                 .description(Metric.PAYMENTS_COUNT.getDescription())
-                .baseUnit(Metric.PAYMENTS_COUNT.getUnit())
                 .register(meterRegistry);
     }
 
@@ -21,7 +20,20 @@ public class GaugeConfig {
     public MultiGauge multiGaugeWithdrawalsCount(MeterRegistry meterRegistry) {
         return MultiGauge.builder(Metric.WITHDRAWALS_COUNT.getName())
                 .description(Metric.WITHDRAWALS_COUNT.getDescription())
-                .baseUnit(Metric.WITHDRAWALS_COUNT.getUnit())
+                .register(meterRegistry);
+    }
+
+    @Bean
+    public MultiGauge multiGaugePaymentsAmount(MeterRegistry meterRegistry) {
+        return MultiGauge.builder(Metric.PAYMENTS_AMOUNT.getName())
+                .description(Metric.PAYMENTS_AMOUNT.getDescription())
+                .register(meterRegistry);
+    }
+
+    @Bean
+    public MultiGauge multiGaugeWithdrawalsAmount(MeterRegistry meterRegistry) {
+        return MultiGauge.builder(Metric.WITHDRAWALS_AMOUNT.getName())
+                .description(Metric.WITHDRAWALS_AMOUNT.getDescription())
                 .register(meterRegistry);
     }
 }

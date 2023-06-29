@@ -3,6 +3,7 @@ with p6 as (with p5 as (with p4 as (with p3 as (with p2 as (with p1 as (select p
                                                                                p.party_id,
                                                                                p.shop_id,
                                                                                p.currency_code,
+                                                                               p.amount,
                                                                                psi.status
                                                                         from dw.payment as p
                                                                                  inner join dw.payment_status_info as psi
@@ -58,7 +59,8 @@ select provider_id,
        issuer_bank,
        issuer_bank_card_payment_system,
        status,
-       count(status)
+       count(status),
+       sum(amount)
 from p6
 group by provider_id,
          provider_name,

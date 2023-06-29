@@ -2,7 +2,8 @@ with w4 as (with w3 as (with w2 as (with w1 as (select w.wallet_id,
                                                        coalesce(w.provider_id, -1)                    as provider_id,
                                                        cast(coalesce(w.terminal_id, '-1') as integer) as terminal_id,
                                                        w.currency_code,
-                                                       w.withdrawal_status
+                                                       w.withdrawal_status,
+                                                       w.amount
                                                 from dw.withdrawal as w
                                                 where w.event_created_at > now() - interval '60 second'
                                                   and w.current)
@@ -32,7 +33,8 @@ select provider_id,
        wallet_name,
        currency_code,
        withdrawal_status,
-       count(withdrawal_status)
+       count(withdrawal_status),
+       sum(amount)
 from w4
 group by provider_id,
          provider_name,

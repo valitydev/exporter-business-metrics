@@ -76,20 +76,20 @@ public class FlowTest {
         var prometheusResponse = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
         var actualMetrics = Arrays.stream(prometheusResponse.split("\n"))
                 .filter(row -> row.startsWith("ebm_")).toList();
-        Assertions.assertEquals(paymentsMetrics.size() + withdrawalsMetrics.size(), actualMetrics.size());
+        Assertions.assertEquals(12, actualMetrics.size());
     }
 
     private List<PaymentsMetricDto> getPaymentsMetricDtos() {
         return List.of(
-                new PaymentsMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "rus", "kaspi jsp", "visa", "pending", "1"),
-                new PaymentsMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "kz", "kaspi jsp", "visa", "captured", "1"),
-                new PaymentsMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "usa", "undefined", "visa", "failed", "1"));
+                new PaymentsMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "rus", "kaspi jsp", "visa", "pending", "1", "280000000"),
+                new PaymentsMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "kz", "kaspi jsp", "visa", "captured", "1", "280000000"),
+                new PaymentsMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "usa", "undefined", "visa", "failed", "1", "280000000"));
     }
 
     private List<WithdrawalsMetricDto> getWithdrawalsMetricDto() {
         return List.of(
-                new WithdrawalsMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "pending", "1"),
-                new WithdrawalsMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "succeeded", "1"),
-                new WithdrawalsMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "failed", "1"));
+                new WithdrawalsMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "pending", "1", "280000000"),
+                new WithdrawalsMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "succeeded", "1", "280000000"),
+                new WithdrawalsMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "failed", "1", "280000000"));
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 
@@ -23,11 +24,15 @@ import java.util.stream.Collectors;
 @SuppressWarnings("LineLength")
 public class WithdrawalService {
 
+    private static final String WITHDRAWALS_COUNT = Metric.WITHDRAWALS_COUNT.getName();
+    private static final String WITHDRAWALS_AMOUNT = Metric.WITHDRAWALS_AMOUNT.getName();
+
     @Value("${interval.time}")
     private String intervalTime;
 
     private final WithdrawalRepository withdrawalRepository;
     private final MultiGauge multiGaugeWithdrawalsCount;
+    private final MultiGauge multiGaugeWithdrawalsAmount;
     private final MeterRegistryService meterRegistryService;
 
     public void registerMetrics() {
@@ -47,13 +52,22 @@ public class WithdrawalService {
                         default -> otherStatusCount.increment();
                     }
                 })
-                .map(dto -> {
-                    final var value = Double.parseDouble(dto.getCount());
-                    return MultiGauge.Row.of(getTags(dto), this, o -> value);
+                .flatMap(dto -> {
+                    final var count = Double.parseDouble(dto.getCount());
+                    final var amount = Double.parseDouble(dto.getAmount());
+                    return Map.of(
+                            WITHDRAWALS_COUNT, MultiGauge.Row.of(getTags(dto), this, o -> count),
+                            WITHDRAWALS_AMOUNT, MultiGauge.Row.of(getTags(dto), this, o -> amount)).entrySet().stream();
                 })
-                .collect(Collectors.<MultiGauge.Row<?>>toList());
-        multiGaugeWithdrawalsCount.register(rows, true);
-        var registeredMetricsSize = meterRegistryService.getRegisteredMetricsSize(Metric.WITHDRAWALS_COUNT.getName());
+                .collect(
+                        Collectors.groupingBy(
+                                Map.Entry::getKey,
+                                Collectors.mapping(
+                                        Map.Entry::getValue,
+                                        Collectors.<MultiGauge.Row<?>>toList())));
+        multiGaugeWithdrawalsCount.register(rows.get(WITHDRAWALS_COUNT), true);
+        multiGaugeWithdrawalsAmount.register(rows.get(WITHDRAWALS_AMOUNT), true);
+        var registeredMetricsSize = meterRegistryService.getRegisteredMetricsSize(Metric.WITHDRAWALS_COUNT.getName()) + meterRegistryService.getRegisteredMetricsSize(Metric.WITHDRAWALS_AMOUNT.getName());
         log.info("Actual withdrawal metrics have been registered to 'prometheus', " +
                 "registeredMetricsSize = {}, pendingCount = {}, failedCount = {}, succeededCount = {}, otherStatusCount = {}", registeredMetricsSize, pendingCount, failedCount, succeededCount, otherStatusCount);
     }
