@@ -58,8 +58,8 @@ public class PaymentService {
                     final var count = Double.parseDouble(dto.getCount());
                     final var amount = Double.parseDouble(dto.getAmount());
                     return Map.of(
-                            PAYMENTS_COUNT, MultiGauge.Row.of(getTags(dto), this, o -> count),
-                            PAYMENTS_AMOUNT, MultiGauge.Row.of(getTags(dto), this, o -> amount)).entrySet().stream();
+                            PAYMENTS_COUNT, MultiGauge.Row.of(getTags(dto), () -> count),
+                            PAYMENTS_AMOUNT, MultiGauge.Row.of(getTags(dto), () -> amount)).entrySet().stream();
                 })
                 .collect(
                         Collectors.groupingBy(

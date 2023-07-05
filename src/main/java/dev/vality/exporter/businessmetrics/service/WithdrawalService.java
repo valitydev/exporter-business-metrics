@@ -58,8 +58,8 @@ public class WithdrawalService {
                     final var count = Double.parseDouble(dto.getCount());
                     final var amount = Double.parseDouble(dto.getAmount());
                     return Map.of(
-                            WITHDRAWALS_COUNT, MultiGauge.Row.of(getTags(dto), this, o -> count),
-                            WITHDRAWALS_AMOUNT, MultiGauge.Row.of(getTags(dto), this, o -> amount)).entrySet().stream();
+                            WITHDRAWALS_COUNT, MultiGauge.Row.of(getTags(dto), () -> count),
+                            WITHDRAWALS_AMOUNT, MultiGauge.Row.of(getTags(dto), () -> amount)).entrySet().stream();
                 })
                 .collect(
                         Collectors.groupingBy(
