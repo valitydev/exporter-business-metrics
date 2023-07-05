@@ -69,9 +69,11 @@ public class PaymentService {
                                         Collectors.<MultiGauge.Row<?>>toList())));
         multiGaugePaymentsCount.register(rows.get(PAYMENTS_COUNT), true);
         multiGaugePaymentsAmount.register(rows.get(PAYMENTS_AMOUNT), true);
-        var registeredMetricsSize = meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_COUNT.getName()) + meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_AMOUNT.getName());
+        var paymentCountRegisteredMetrics = meterRegistryService.getRegisteredMetrics(Metric.PAYMENTS_COUNT.getName());
+        var paymentAmountRegisteredMetrics = meterRegistryService.getRegisteredMetrics(Metric.PAYMENTS_AMOUNT.getName());
+        var registeredMetricsSize = paymentCountRegisteredMetrics.size() + paymentAmountRegisteredMetrics.size();
         log.info("Actual payments metrics have been registered to 'prometheus', " +
-                "count = {}, registeredMetricsSize = {}, pendingCount = {}, failedCount = {}, capturedCount = {}, otherStatusCount = {}, metrics = {}", metrics.size(), registeredMetricsSize, pendingCount, failedCount, capturedCount, otherStatusCount, objectMapper.writeValueAsString(metrics));
+                "count = {}, registeredMetricsSize = {}, pendingCount = {}, failedCount = {}, capturedCount = {}, otherStatusCount = {}, metrics = {}, paymentCountRegisteredMetrics = {}, paymentAmountRegisteredMetrics = {}", metrics.size(), registeredMetricsSize, pendingCount, failedCount, capturedCount, otherStatusCount, objectMapper.writeValueAsString(metrics), paymentCountRegisteredMetrics, paymentAmountRegisteredMetrics);
     }
 
     private LocalDateTime getStartPeriodDate() {

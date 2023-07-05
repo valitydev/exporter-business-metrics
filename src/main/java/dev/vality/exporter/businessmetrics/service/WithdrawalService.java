@@ -69,9 +69,11 @@ public class WithdrawalService {
                                         Collectors.<MultiGauge.Row<?>>toList())));
         multiGaugeWithdrawalsCount.register(rows.get(WITHDRAWALS_COUNT), true);
         multiGaugeWithdrawalsAmount.register(rows.get(WITHDRAWALS_AMOUNT), true);
-        var registeredMetricsSize = meterRegistryService.getRegisteredMetricsSize(Metric.WITHDRAWALS_COUNT.getName()) + meterRegistryService.getRegisteredMetricsSize(Metric.WITHDRAWALS_AMOUNT.getName());
+        var withdrawalCountRegisteredMetrics = meterRegistryService.getRegisteredMetrics(Metric.WITHDRAWALS_COUNT.getName());
+        var withdrawalAmountRegisteredMetrics = meterRegistryService.getRegisteredMetrics(Metric.WITHDRAWALS_AMOUNT.getName());
+        var registeredMetricsSize = withdrawalCountRegisteredMetrics.size() + withdrawalAmountRegisteredMetrics.size();
         log.info("Actual withdrawal metrics have been registered to 'prometheus', " +
-                "count = {}, registeredMetricsSize = {}, pendingCount = {}, failedCount = {}, succeededCount = {}, otherStatusCount = {}, metrics = {}", metrics.size(), registeredMetricsSize, pendingCount, failedCount, succeededCount, otherStatusCount, objectMapper.writeValueAsString(metrics));
+                "count = {}, registeredMetricsSize = {}, pendingCount = {}, failedCount = {}, succeededCount = {}, otherStatusCount = {}, metrics = {}, withdrawalCountRegisteredMetrics = {}, withdrawalAmountRegisteredMetrics = {}", metrics.size(), registeredMetricsSize, pendingCount, failedCount, succeededCount, otherStatusCount, objectMapper.writeValueAsString(metrics), withdrawalCountRegisteredMetrics, withdrawalAmountRegisteredMetrics);
     }
 
     private LocalDateTime getStartPeriodDate() {
