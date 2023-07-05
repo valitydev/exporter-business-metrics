@@ -71,7 +71,7 @@ public class PaymentService {
         multiGaugePaymentsAmount.register(rows.get(PAYMENTS_AMOUNT), true);
         var registeredMetricsSize = meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_COUNT.getName()) + meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_AMOUNT.getName());
         log.info("Actual payments metrics have been registered to 'prometheus', " +
-                "count = {}, pendingCount = {}, failedCount = {}, capturedCount = {}, otherStatusCount = {}, metrics = {}", metrics.size(), pendingCount, failedCount, capturedCount, otherStatusCount, objectMapper.writeValueAsString(metrics));
+                "count = {}, registeredMetricsSize = {}, pendingCount = {}, failedCount = {}, capturedCount = {}, otherStatusCount = {}, metrics = {}", metrics.size(), registeredMetricsSize, pendingCount, failedCount, capturedCount, otherStatusCount, objectMapper.writeValueAsString(metrics));
     }
 
     private LocalDateTime getStartPeriodDate() {
