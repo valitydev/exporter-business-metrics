@@ -1,5 +1,6 @@
 package dev.vality.exporter.businessmetrics.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.vality.exporter.businessmetrics.entity.PaymentsMetricDto;
 import dev.vality.exporter.businessmetrics.model.CustomTag;
 import dev.vality.exporter.businessmetrics.model.Metric;
@@ -7,6 +8,7 @@ import dev.vality.exporter.businessmetrics.repository.PaymentRepository;
 import io.micrometer.core.instrument.MultiGauge;
 import io.micrometer.core.instrument.Tags;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,11 +36,11 @@ public class PaymentService {
     private final MultiGauge multiGaugePaymentsCount;
     private final MultiGauge multiGaugePaymentsAmount;
     private final MeterRegistryService meterRegistryService;
+    private final ObjectMapper objectMapper;
 
+    @SneakyThrows
     public void registerMetrics() {
         var metrics = paymentRepository.getPaymentsMetricsByInterval(getStartPeriodDate());
-        log.debug("Actual payments metrics have been got from 'daway' db, " +
-                "interval = {}, count = {}", intervalTime, metrics.size());
         final var pendingCount = new LongAdder();
         final var failedCount = new LongAdder();
         final var capturedCount = new LongAdder();
@@ -69,7 +71,7 @@ public class PaymentService {
         multiGaugePaymentsAmount.register(rows.get(PAYMENTS_AMOUNT), true);
         var registeredMetricsSize = meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_COUNT.getName()) + meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_AMOUNT.getName());
         log.info("Actual payments metrics have been registered to 'prometheus', " +
-                "registeredMetricsSize = {}, pendingCount = {}, failedCount = {}, capturedCount = {}, otherStatusCount = {}", registeredMetricsSize, pendingCount, failedCount, capturedCount, otherStatusCount);
+                "count = {}, pendingCount = {}, failedCount = {}, capturedCount = {}, otherStatusCount = {}, metrics = {}", metrics.size(), pendingCount, failedCount, capturedCount, otherStatusCount, objectMapper.writeValueAsString(metrics));
     }
 
     private LocalDateTime getStartPeriodDate() {
