@@ -13,7 +13,7 @@ management:
       prometheus:
         enabled: true
     tags:
-      application: exporter-business-metrics
+      application: '${project.name}'
   endpoint:
     health:
       probes:
@@ -30,7 +30,7 @@ management:
 
 spring:
   application:
-    name: exporter-business-metrics
+    name: '${project.name}'
   output:
     ansi:
       enabled: always
