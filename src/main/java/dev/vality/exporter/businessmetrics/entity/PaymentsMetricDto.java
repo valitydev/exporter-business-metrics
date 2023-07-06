@@ -23,7 +23,7 @@ import javax.persistence.*;
                                                                                                                p.payment_id =
                                                                                                                psi.payment_id and
                                                                                                                psi.current
-                                                                                        where p.event_created_at > :startPeriodDate)
+                                                                                        where psi.event_created_at > :startPeriodDate)
                                                                             select p1.*,
                                                                                    coalesce(ppi.issuer_country, 'undefined')           as issuer_country,
                                                                                    coalesce(ppi.bank_name, 'undefined')                as issuer_bank,
