@@ -1,7 +1,5 @@
 package dev.vality.exporter.businessmetrics.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -111,31 +109,18 @@ public class PaymentsMetricDto {
 
     @Id
     private Long id;
-    @JsonProperty("provider_id")
     private String providerId;
-    @JsonIgnore
     private String providerName;
-    @JsonProperty("terminal_id")
     private String terminalId;
-    @JsonIgnore
     private String terminalName;
-    @JsonProperty("shop_id")
     private String shopId;
-    @JsonIgnore
     private String shopName;
-    @JsonIgnore
     private String currencyCode;
-    @JsonIgnore
     private String issuerCountry;
-    @JsonIgnore
     private String issuerBank;
-    @JsonIgnore
     private String issuerBankCardPaymentSystem;
-    @JsonProperty("status")
     private String status;
-    @JsonProperty("count")
     private String count;
-    @JsonProperty("amount")
     private String amount;
 
     public PaymentsMetricDto() {
