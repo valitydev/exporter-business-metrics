@@ -1,7 +1,9 @@
 package dev.vality.exporter.businessmetrics;
 
-import dev.vality.exporter.businessmetrics.entity.PaymentsMetricDto;
-import dev.vality.exporter.businessmetrics.entity.WithdrawalsMetricDto;
+import dev.vality.exporter.businessmetrics.entity.payment.PaymentsMetricDto;
+import dev.vality.exporter.businessmetrics.entity.payment.PaymentsTransactionCountMetricDto;
+import dev.vality.exporter.businessmetrics.entity.withdrawal.WithdrawalsMetricDto;
+import dev.vality.exporter.businessmetrics.entity.withdrawal.WithdrawalsTransactionCountMetricDto;
 import dev.vality.exporter.businessmetrics.repository.PaymentRepository;
 import dev.vality.exporter.businessmetrics.repository.WithdrawalRepository;
 import dev.vality.exporter.businessmetrics.service.SchedulerRegisterMetricsService;
@@ -64,32 +66,52 @@ public class FlowTest {
 
     @Test
     public void metricsHaveBeenRegisteredTest() throws Exception {
-        var paymentsMetrics = getPaymentsMetricDtos();
-        var withdrawalsMetrics = getWithdrawalsMetricDto();
-        when(paymentRepository.getPaymentsMetricsByInterval(any())).thenReturn(paymentsMetrics);
-        when(withdrawalRepository.getWithdrawalsMetricsByInterval(any())).thenReturn(withdrawalsMetrics);
+        var paymentsFinalStatusesMetrics = getPaymentsFinalStatusMetricDtos();
+        var paymentsTransactionCountMetrics = getPaymentsTransactionCountMetricDtos();
+        var withdrawalsFinalStatusesMetrics = getWithdrawalsFinalStatusMetricDtos();
+        var withdrawalsTransactionCountMetrics = getWithdrawalsTransactionCountMetricDtos();
+        when(paymentRepository.getPaymentsFinalStatusMetricsByInterval(any())).thenReturn(paymentsFinalStatusesMetrics);
+        when(paymentRepository.getPaymentsCountMetricsByInterval(any())).thenReturn(paymentsTransactionCountMetrics);
+        when(withdrawalRepository.getWithdrawalsFinalStatusMetricsByInterval(any())).thenReturn(withdrawalsFinalStatusesMetrics);
+        when(withdrawalRepository.getWithdrawalsCountMetricsByInterval(any())).thenReturn(withdrawalsTransactionCountMetrics);
         schedulerRegisterMetricsService.registerMetricsTask();
-        verify(paymentRepository, times(1)).getPaymentsMetricsByInterval(any());
-        verify(withdrawalRepository, times(1)).getWithdrawalsMetricsByInterval(any());
+        verify(paymentRepository, times(1)).getPaymentsFinalStatusMetricsByInterval(any());
+        verify(paymentRepository, times(1)).getPaymentsCountMetricsByInterval(any());
+        verify(withdrawalRepository, times(1)).getWithdrawalsFinalStatusMetricsByInterval(any());
+        verify(withdrawalRepository, times(1)).getWithdrawalsCountMetricsByInterval(any());
         var mvcResult = mockMvc.perform(get("/actuator/prometheus"))
                 .andReturn();
         var prometheusResponse = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
         var actualMetrics = Arrays.stream(prometheusResponse.split("\n"))
                 .filter(row -> row.startsWith("ebm_")).toList();
-        Assertions.assertEquals(12, actualMetrics.size());
+        Assertions.assertEquals(18, actualMetrics.size());
     }
 
-    private List<PaymentsMetricDto> getPaymentsMetricDtos() {
+    private List<PaymentsMetricDto> getPaymentsFinalStatusMetricDtos() {
         return List.of(
                 new PaymentsMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "rus", "kaspi jsp", "visa", "pending", "1", "280000000"),
                 new PaymentsMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "kz", "kaspi jsp", "visa", "captured", "1", "280000000"),
                 new PaymentsMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "usa", "undefined", "visa", "failed", "1", "280000000"));
     }
 
-    private List<WithdrawalsMetricDto> getWithdrawalsMetricDto() {
+    private List<PaymentsTransactionCountMetricDto> getPaymentsTransactionCountMetricDtos() {
+        return List.of(
+                new PaymentsTransactionCountMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "1"),
+                new PaymentsTransactionCountMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "1"),
+                new PaymentsTransactionCountMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "1"));
+    }
+
+    private List<WithdrawalsMetricDto> getWithdrawalsFinalStatusMetricDtos() {
         return List.of(
                 new WithdrawalsMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "pending", "1", "280000000"),
                 new WithdrawalsMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "succeeded", "1", "280000000"),
                 new WithdrawalsMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "failed", "1", "280000000"));
+    }
+
+    private List<WithdrawalsTransactionCountMetricDto> getWithdrawalsTransactionCountMetricDtos() {
+        return List.of(
+                new WithdrawalsTransactionCountMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "pending", "1"),
+                new WithdrawalsTransactionCountMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "succeeded", "1"),
+                new WithdrawalsTransactionCountMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "failed", "1"));
     }
 }

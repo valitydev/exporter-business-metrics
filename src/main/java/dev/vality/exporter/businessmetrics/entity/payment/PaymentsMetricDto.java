@@ -1,4 +1,4 @@
-package dev.vality.exporter.businessmetrics.entity;
+package dev.vality.exporter.businessmetrics.entity.payment;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @NamedNativeQuery(
-        name = "getPaymentsMetricsByInterval",
+        name = "getPaymentsFinalStatusMetricsByInterval",
         query = """
                 with p6 as (with p5 as (with p4 as (with p3 as (with p2 as (with p1 as (select p.invoice_id,
                                                                                                p.payment_id,
@@ -23,7 +23,7 @@ import javax.persistence.*;
                                                                                                                p.payment_id =
                                                                                                                psi.payment_id and
                                                                                                                psi.current
-                                                                                        where psi.event_created_at > :startPeriodDate)
+                                                                                        where psi.event_created_at > :startPeriodDate and psi.status in ('failed','captured'))
                                                                             select p1.*,
                                                                                    coalesce(ppi.issuer_country, 'undefined')           as issuer_country,
                                                                                    coalesce(ppi.bank_name, 'undefined')                as issuer_bank,
