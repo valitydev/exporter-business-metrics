@@ -3,7 +3,6 @@ package dev.vality.exporter.businessmetrics;
 import dev.vality.exporter.businessmetrics.entity.payment.PaymentsMetricDto;
 import dev.vality.exporter.businessmetrics.entity.payment.PaymentsTransactionCountMetricDto;
 import dev.vality.exporter.businessmetrics.entity.withdrawal.WithdrawalsMetricDto;
-import dev.vality.exporter.businessmetrics.entity.withdrawal.WithdrawalsTransactionCountMetricDto;
 import dev.vality.exporter.businessmetrics.repository.PaymentRepository;
 import dev.vality.exporter.businessmetrics.repository.WithdrawalRepository;
 import dev.vality.exporter.businessmetrics.service.SchedulerRegisterMetricsService;
@@ -69,22 +68,19 @@ public class FlowTest {
         var paymentsFinalStatusesMetrics = getPaymentsFinalStatusMetricDtos();
         var paymentsTransactionCountMetrics = getPaymentsTransactionCountMetricDtos();
         var withdrawalsFinalStatusesMetrics = getWithdrawalsFinalStatusMetricDtos();
-        var withdrawalsTransactionCountMetrics = getWithdrawalsTransactionCountMetricDtos();
         when(paymentRepository.getPaymentsFinalStatusMetricsByInterval(any())).thenReturn(paymentsFinalStatusesMetrics);
         when(paymentRepository.getPaymentsCountMetricsByInterval(any())).thenReturn(paymentsTransactionCountMetrics);
         when(withdrawalRepository.getWithdrawalsFinalStatusMetricsByInterval(any())).thenReturn(withdrawalsFinalStatusesMetrics);
-        when(withdrawalRepository.getWithdrawalsCountMetricsByInterval(any())).thenReturn(withdrawalsTransactionCountMetrics);
         schedulerRegisterMetricsService.registerMetricsTask();
         verify(paymentRepository, times(1)).getPaymentsFinalStatusMetricsByInterval(any());
         verify(paymentRepository, times(1)).getPaymentsCountMetricsByInterval(any());
         verify(withdrawalRepository, times(1)).getWithdrawalsFinalStatusMetricsByInterval(any());
-        verify(withdrawalRepository, times(1)).getWithdrawalsCountMetricsByInterval(any());
         var mvcResult = mockMvc.perform(get("/actuator/prometheus"))
                 .andReturn();
         var prometheusResponse = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
         var actualMetrics = Arrays.stream(prometheusResponse.split("\n"))
                 .filter(row -> row.startsWith("ebm_")).toList();
-        Assertions.assertEquals(18, actualMetrics.size());
+        Assertions.assertEquals(15, actualMetrics.size());
     }
 
     private List<PaymentsMetricDto> getPaymentsFinalStatusMetricDtos() {
@@ -106,12 +102,5 @@ public class FlowTest {
                 new WithdrawalsMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "pending", "1", "280000000"),
                 new WithdrawalsMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "succeeded", "1", "280000000"),
                 new WithdrawalsMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "failed", "1", "280000000"));
-    }
-
-    private List<WithdrawalsTransactionCountMetricDto> getWithdrawalsTransactionCountMetricDtos() {
-        return List.of(
-                new WithdrawalsTransactionCountMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "pending", "1"),
-                new WithdrawalsTransactionCountMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "succeeded", "1"),
-                new WithdrawalsTransactionCountMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "failed", "1"));
     }
 }

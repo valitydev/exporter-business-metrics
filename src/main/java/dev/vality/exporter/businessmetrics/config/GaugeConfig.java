@@ -31,13 +31,6 @@ public class GaugeConfig {
     }
 
     @Bean
-    public MultiGauge multiGaugeWithdrawalsTransactionCount(MeterRegistry meterRegistry) {
-        return MultiGauge.builder(Metric.WITHDRAWALS_TRANSACTION_COUNT.getName())
-                .description(Metric.WITHDRAWALS_TRANSACTION_COUNT.getDescription())
-                .register(meterRegistry);
-    }
-
-    @Bean
     public MultiGauge multiGaugePaymentsAmount(MeterRegistry meterRegistry) {
         return MultiGauge.builder(Metric.PAYMENTS_AMOUNT.getName())
                 .description(Metric.PAYMENTS_AMOUNT.getDescription())
