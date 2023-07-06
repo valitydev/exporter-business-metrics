@@ -1,4 +1,4 @@
-package dev.vality.exporter.businessmetrics.entity;
+package dev.vality.exporter.businessmetrics.entity.withdrawal;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

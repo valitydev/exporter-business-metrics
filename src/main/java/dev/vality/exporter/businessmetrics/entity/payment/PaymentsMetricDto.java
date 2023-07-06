@@ -1,7 +1,5 @@
-package dev.vality.exporter.businessmetrics.entity;
+package dev.vality.exporter.businessmetrics.entity.payment;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,7 +7,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @NamedNativeQuery(
-        name = "getPaymentsMetricsByInterval",
+        name = "getPaymentsFinalStatusMetricsByInterval",
         query = """
                 with p6 as (with p5 as (with p4 as (with p3 as (with p2 as (with p1 as (select p.invoice_id,
                                                                                                p.payment_id,
@@ -25,7 +23,7 @@ import javax.persistence.*;
                                                                                                                p.payment_id =
                                                                                                                psi.payment_id and
                                                                                                                psi.current
-                                                                                        where p.event_created_at > :startPeriodDate)
+                                                                                        where psi.event_created_at > :startPeriodDate and psi.status in ('failed','captured'))
                                                                             select p1.*,
                                                                                    coalesce(ppi.issuer_country, 'undefined')           as issuer_country,
                                                                                    coalesce(ppi.bank_name, 'undefined')                as issuer_bank,
@@ -111,31 +109,18 @@ public class PaymentsMetricDto {
 
     @Id
     private Long id;
-    @JsonProperty("provider_id")
     private String providerId;
-    @JsonIgnore
     private String providerName;
-    @JsonProperty("terminal_id")
     private String terminalId;
-    @JsonIgnore
     private String terminalName;
-    @JsonProperty("shop_id")
     private String shopId;
-    @JsonIgnore
     private String shopName;
-    @JsonIgnore
     private String currencyCode;
-    @JsonIgnore
     private String issuerCountry;
-    @JsonIgnore
     private String issuerBank;
-    @JsonIgnore
     private String issuerBankCardPaymentSystem;
-    @JsonProperty("status")
     private String status;
-    @JsonProperty("count")
     private String count;
-    @JsonProperty("amount")
     private String amount;
 
     public PaymentsMetricDto() {

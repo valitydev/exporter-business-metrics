@@ -1,14 +1,12 @@
 package dev.vality.exporter.businessmetrics.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.vality.exporter.businessmetrics.entity.WithdrawalsMetricDto;
+import dev.vality.exporter.businessmetrics.entity.withdrawal.WithdrawalsMetricDto;
 import dev.vality.exporter.businessmetrics.model.CustomTag;
 import dev.vality.exporter.businessmetrics.model.Metric;
 import dev.vality.exporter.businessmetrics.repository.WithdrawalRepository;
 import io.micrometer.core.instrument.MultiGauge;
 import io.micrometer.core.instrument.Tags;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,21 +24,21 @@ import java.util.stream.Collectors;
 @SuppressWarnings("LineLength")
 public class WithdrawalService {
 
-    private static final String WITHDRAWALS_COUNT = Metric.WITHDRAWALS_COUNT.getName();
+    private static final String WITHDRAWALS_FINAL_STATUS_COUNT = Metric.WITHDRAWALS_FINAL_STATUS_COUNT.getName();
     private static final String WITHDRAWALS_AMOUNT = Metric.WITHDRAWALS_AMOUNT.getName();
 
     @Value("${interval.time}")
     private String intervalTime;
 
     private final WithdrawalRepository withdrawalRepository;
-    private final MultiGauge multiGaugeWithdrawalsCount;
+    private final MultiGauge multiGaugeWithdrawalsFinalStatusCount;
     private final MultiGauge multiGaugeWithdrawalsAmount;
     private final MeterRegistryService meterRegistryService;
-    private final ObjectMapper objectMapper;
 
-    @SneakyThrows
     public void registerMetrics() {
-        var metrics = withdrawalRepository.getWithdrawalsMetricsByInterval(getStartPeriodDate());
+        var metrics = withdrawalRepository.getWithdrawalsFinalStatusMetricsByInterval(getStartPeriodDate());
+        log.debug("Actual withdrawal metrics have been got from 'daway' db, " +
+                "interval = {}, count = {}", intervalTime, metrics.size());
         final var pendingCount = new LongAdder();
         final var failedCount = new LongAdder();
         final var succeededCount = new LongAdder();
@@ -58,7 +56,7 @@ public class WithdrawalService {
                     final var count = Double.parseDouble(dto.getCount());
                     final var amount = Double.parseDouble(dto.getAmount());
                     return Map.of(
-                            WITHDRAWALS_COUNT, MultiGauge.Row.of(getTags(dto), this, o -> count),
+                            WITHDRAWALS_FINAL_STATUS_COUNT, MultiGauge.Row.of(getTags(dto), this, o -> count),
                             WITHDRAWALS_AMOUNT, MultiGauge.Row.of(getTags(dto), this, o -> amount)).entrySet().stream();
                 })
                 .collect(
@@ -67,13 +65,15 @@ public class WithdrawalService {
                                 Collectors.mapping(
                                         Map.Entry::getValue,
                                         Collectors.<MultiGauge.Row<?>>toList())));
-        multiGaugeWithdrawalsCount.register(rows.get(WITHDRAWALS_COUNT), true);
+        multiGaugeWithdrawalsFinalStatusCount.register(rows.get(WITHDRAWALS_FINAL_STATUS_COUNT), true);
         multiGaugeWithdrawalsAmount.register(rows.get(WITHDRAWALS_AMOUNT), true);
-        var withdrawalCountRegisteredMetrics = meterRegistryService.getRegisteredMetrics(Metric.WITHDRAWALS_COUNT.getName());
-        var withdrawalAmountRegisteredMetrics = meterRegistryService.getRegisteredMetrics(Metric.WITHDRAWALS_AMOUNT.getName());
-        var registeredMetricsSize = withdrawalCountRegisteredMetrics.size() + withdrawalAmountRegisteredMetrics.size();
+        var registeredMetricsSize =
+                meterRegistryService.getRegisteredMetricsSize(Metric.WITHDRAWALS_FINAL_STATUS_COUNT.getName()) +
+                        meterRegistryService.getRegisteredMetricsSize(Metric.WITHDRAWALS_AMOUNT.getName());
         log.info("Actual withdrawal metrics have been registered to 'prometheus', " +
-                "count = {}, registeredMetricsSize = {}, pendingCount = {}, failedCount = {}, succeededCount = {}, otherStatusCount = {}, metrics = {}, withdrawalCountRegisteredMetrics = {}, withdrawalAmountRegisteredMetrics = {}", metrics.size(), registeredMetricsSize, pendingCount, failedCount, succeededCount, otherStatusCount, objectMapper.writeValueAsString(metrics), withdrawalCountRegisteredMetrics, withdrawalAmountRegisteredMetrics);
+                "registeredMetricsSize = {}, pendingCount = {}, failedCount = {}, succeededCount = {}, " +
+                "otherStatusCount = {}", registeredMetricsSize, pendingCount, failedCount, succeededCount,
+                otherStatusCount);
     }
 
     private LocalDateTime getStartPeriodDate() {

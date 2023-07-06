@@ -1,7 +1,5 @@
-package dev.vality.exporter.businessmetrics.entity;
+package dev.vality.exporter.businessmetrics.entity.withdrawal;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,7 +16,7 @@ import javax.persistence.*;
                                                                        w.withdrawal_status,
                                                                        w.amount
                                                                 from dw.withdrawal as w
-                                                                where w.event_created_at > :startPeriodDate
+                                                                where w.event_created_at > :startPeriodDate and w.withdrawal_status in ('succeeded', 'failed')
                                                                   and w.current)
                                                     select w1.*,
                                                            p.name as provider_name
@@ -79,25 +77,15 @@ public class WithdrawalsMetricDto {
 
     @Id
     private Long id;
-    @JsonProperty("provider_id")
     private String providerId;
-    @JsonIgnore
     private String providerName;
-    @JsonProperty("terminal_id")
     private String terminalId;
-    @JsonIgnore
     private String terminalName;
-    @JsonProperty("wallet_id")
     private String walletId;
-    @JsonIgnore
     private String walletName;
-    @JsonIgnore
     private String currencyCode;
-    @JsonProperty("status")
     private String status;
-    @JsonProperty("count")
     private String count;
-    @JsonProperty("amount")
     private String amount;
 
     public WithdrawalsMetricDto() {

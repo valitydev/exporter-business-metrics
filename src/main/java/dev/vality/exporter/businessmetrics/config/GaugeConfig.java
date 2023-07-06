@@ -10,16 +10,23 @@ import org.springframework.context.annotation.Configuration;
 public class GaugeConfig {
 
     @Bean
-    public MultiGauge multiGaugePaymentsCount(MeterRegistry meterRegistry) {
-        return MultiGauge.builder(Metric.PAYMENTS_COUNT.getName())
-                .description(Metric.PAYMENTS_COUNT.getDescription())
+    public MultiGauge multiGaugePaymentsFinalStatusCount(MeterRegistry meterRegistry) {
+        return MultiGauge.builder(Metric.PAYMENTS_FINAL_STATUS_COUNT.getName())
+                .description(Metric.PAYMENTS_FINAL_STATUS_COUNT.getDescription())
                 .register(meterRegistry);
     }
 
     @Bean
-    public MultiGauge multiGaugeWithdrawalsCount(MeterRegistry meterRegistry) {
-        return MultiGauge.builder(Metric.WITHDRAWALS_COUNT.getName())
-                .description(Metric.WITHDRAWALS_COUNT.getDescription())
+    public MultiGauge multiGaugePaymentsTransactionCount(MeterRegistry meterRegistry) {
+        return MultiGauge.builder(Metric.PAYMENTS_TRANSACTION_COUNT.getName())
+                .description(Metric.PAYMENTS_TRANSACTION_COUNT.getDescription())
+                .register(meterRegistry);
+    }
+
+    @Bean
+    public MultiGauge multiGaugeWithdrawalsFinalStatusCount(MeterRegistry meterRegistry) {
+        return MultiGauge.builder(Metric.WITHDRAWALS_FINAL_STATUS_COUNT.getName())
+                .description(Metric.WITHDRAWALS_FINAL_STATUS_COUNT.getDescription())
                 .register(meterRegistry);
     }
 

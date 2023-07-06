@@ -1,8 +1,8 @@
 package dev.vality.exporter.businessmetrics.repository;
 
-import dev.vality.exporter.businessmetrics.entity.WithdrawalEntity;
-import dev.vality.exporter.businessmetrics.entity.WithdrawalPk;
-import dev.vality.exporter.businessmetrics.entity.WithdrawalsMetricDto;
+import dev.vality.exporter.businessmetrics.entity.withdrawal.WithdrawalEntity;
+import dev.vality.exporter.businessmetrics.entity.withdrawal.WithdrawalPk;
+import dev.vality.exporter.businessmetrics.entity.withdrawal.WithdrawalsMetricDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
+@SuppressWarnings("LineLength")
 public interface WithdrawalRepository extends JpaRepository<WithdrawalEntity, WithdrawalPk> {
 
     @Query(name = "getWithdrawalsMetricsByInterval", nativeQuery = true)
-    List<WithdrawalsMetricDto> getWithdrawalsMetricsByInterval(@Param("startPeriodDate") LocalDateTime startPeriodDate);
-
+    List<WithdrawalsMetricDto> getWithdrawalsFinalStatusMetricsByInterval(@Param("startPeriodDate") LocalDateTime startPeriodDate);
 }
