@@ -16,7 +16,7 @@ import javax.persistence.*;
                                                                        w.withdrawal_status,
                                                                        w.amount
                                                                 from dw.withdrawal as w
-                                                                where w.event_created_at > :startPeriodDate and withdrawal_status in ('succeeded', 'failed')
+                                                                where w.event_created_at > :startPeriodDate and w.withdrawal_status in ('succeeded', 'failed')
                                                                   and w.current)
                                                     select w1.*,
                                                            p.name as provider_name
