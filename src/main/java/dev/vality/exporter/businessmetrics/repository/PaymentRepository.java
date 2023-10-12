@@ -2,7 +2,7 @@ package dev.vality.exporter.businessmetrics.repository;
 
 import dev.vality.exporter.businessmetrics.entity.payment.PaymentEntity;
 import dev.vality.exporter.businessmetrics.entity.payment.PaymentPk;
-import dev.vality.exporter.businessmetrics.entity.payment.PaymentsMetricDto;
+import dev.vality.exporter.businessmetrics.entity.payment.PaymentsAggregatedMetricDto;
 import dev.vality.exporter.businessmetrics.entity.payment.PaymentsTransactionCountMetricDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +17,7 @@ import java.util.List;
 public interface PaymentRepository extends JpaRepository<PaymentEntity, PaymentPk> {
 
     @Query(name = "getPaymentsFinalStatusMetricsByInterval", nativeQuery = true)
-    List<PaymentsMetricDto> getPaymentsFinalStatusMetricsByInterval(@Param("startPeriodDate") LocalDateTime startPeriodDate);
+    List<PaymentsAggregatedMetricDto> getPaymentsFinalStatusMetricsByInterval(@Param("startPeriodDate") LocalDateTime startPeriodDate);
 
     @Query(name = "getPaymentsCountMetricsByInterval", nativeQuery = true)
     List<PaymentsTransactionCountMetricDto> getPaymentsCountMetricsByInterval(@Param("startPeriodDate") LocalDateTime startPeriodDate);

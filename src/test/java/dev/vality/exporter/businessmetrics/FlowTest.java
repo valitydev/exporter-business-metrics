@@ -1,8 +1,8 @@
 package dev.vality.exporter.businessmetrics;
 
-import dev.vality.exporter.businessmetrics.entity.payment.PaymentsMetricDto;
+import dev.vality.exporter.businessmetrics.entity.payment.PaymentsAggregatedMetricDto;
 import dev.vality.exporter.businessmetrics.entity.payment.PaymentsTransactionCountMetricDto;
-import dev.vality.exporter.businessmetrics.entity.withdrawal.WithdrawalsMetricDto;
+import dev.vality.exporter.businessmetrics.entity.withdrawal.WithdrawalsAggregatedMetricDto;
 import dev.vality.exporter.businessmetrics.repository.PaymentRepository;
 import dev.vality.exporter.businessmetrics.repository.WithdrawalRepository;
 import dev.vality.exporter.businessmetrics.service.SchedulerRegisterMetricsService;
@@ -80,14 +80,20 @@ public class FlowTest {
         var prometheusResponse = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
         var actualMetrics = Arrays.stream(prometheusResponse.split("\n"))
                 .filter(row -> row.startsWith("ebm_")).toList();
-        Assertions.assertEquals(15, actualMetrics.size());
+        Assertions.assertEquals(99, actualMetrics.size());
     }
 
-    private List<PaymentsMetricDto> getPaymentsFinalStatusMetricDtos() {
+    private List<PaymentsAggregatedMetricDto> getPaymentsFinalStatusMetricDtos() {
         return List.of(
-                new PaymentsMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "rus", "kaspi jsp", "visa", "pending", "1", "280000000"),
-                new PaymentsMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "kz", "kaspi jsp", "visa", "captured", "1", "280000000"),
-                new PaymentsMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "usa", "undefined", "visa", "failed", "1", "280000000"));
+                new PaymentsAggregatedMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "pending", "1",
+                        "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1",
+                        "280000000", "1", "280000000", "1", "280000000"),
+                new PaymentsAggregatedMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "captured", "1",
+                        "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1",
+                        "280000000", "1", "280000000", "1", "280000000"),
+                new PaymentsAggregatedMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "failed", "1",
+                        "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1",
+                        "280000000", "1", "280000000", "1", "280000000"));
     }
 
     private List<PaymentsTransactionCountMetricDto> getPaymentsTransactionCountMetricDtos() {
@@ -97,10 +103,10 @@ public class FlowTest {
                 new PaymentsTransactionCountMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "1"));
     }
 
-    private List<WithdrawalsMetricDto> getWithdrawalsFinalStatusMetricDtos() {
+    private List<WithdrawalsAggregatedMetricDto> getWithdrawalsFinalStatusMetricDtos() {
         return List.of(
-                new WithdrawalsMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "pending", "1", "280000000"),
-                new WithdrawalsMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "succeeded", "1", "280000000"),
-                new WithdrawalsMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "failed", "1", "280000000"));
+                new WithdrawalsAggregatedMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "pending", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000"),
+                new WithdrawalsAggregatedMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "succeeded", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000"),
+                new WithdrawalsAggregatedMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "failed", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000"));
     }
 }

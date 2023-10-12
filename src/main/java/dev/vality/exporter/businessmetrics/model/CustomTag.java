@@ -13,12 +13,10 @@ public class CustomTag {
     public static final String SHOP_ID_TAG = "shop_id";
     public static final String SHOP_NAME_TAG = "shop_name";
     public static final String CURRENCY_TAG = "currency";
-    public static final String COUNTRY_TAG = "issuer_country";
-    public static final String BANK_TAG = "issuer_bank";
-    public static final String BANK_CARD_PAYMENT_SYSTEM_TAG = "issuer_bank_card_payment_system";
     public static final String STATUS_TAG = "status";
     public static final String WALLET_ID_TAG = "wallet_id";
     public static final String WALLET_NAME_TAG = "wallet_name";
+    public static final String DURATION_TAG = "duration";
 
     public static Tag providerId(String providerId) {
         return Tag.of(PROVIDER_ID_TAG, providerId);
@@ -48,18 +46,6 @@ public class CustomTag {
         return Tag.of(CURRENCY_TAG, currency);
     }
 
-    public static Tag issuerCountry(String country) {
-        return Tag.of(COUNTRY_TAG, country);
-    }
-
-    public static Tag issuerBank(String bank) {
-        return Tag.of(BANK_TAG, bank);
-    }
-
-    public static Tag issuerBankCardPaymentSystem(String issuerBankCardPaymentSystem) {
-        return Tag.of(BANK_CARD_PAYMENT_SYSTEM_TAG, issuerBankCardPaymentSystem);
-    }
-
     public static Tag status(String status) {
         return Tag.of(STATUS_TAG, status);
     }
@@ -70,5 +56,9 @@ public class CustomTag {
 
     public static Tag walletName(String walletName) {
         return Tag.of(WALLET_NAME_TAG, walletName);
+    }
+
+    public static Tag duration(String duration) {
+        return Tag.of(DURATION_TAG, duration);
     }
 }
