@@ -104,9 +104,9 @@ import java.util.Map;
                   currency_code,
                   status
                 """,
-        resultSetMapping = "PaymentsMetricDtoList")
+        resultSetMapping = "PaymentsAggregatedMetricDtoList")
 @SqlResultSetMapping(
-        name = "PaymentsMetricDtoList",
+        name = "PaymentsAggregatedMetricDtoList",
         classes = @ConstructorResult(
                 targetClass = PaymentsAggregatedMetricDto.class,
                 columns = {

@@ -90,9 +90,9 @@ import java.util.Map;
                   currency_code,
                   withdrawal_status
                 """,
-        resultSetMapping = "WithdrawalsMetricDtoList")
+        resultSetMapping = "WithdrawalsAggregatedMetricDtoList")
 @SqlResultSetMapping(
-        name = "WithdrawalsMetricDtoList",
+        name = "WithdrawalsAggregatedMetricDtoList",
         classes = @ConstructorResult(
                 targetClass = WithdrawalsAggregatedMetricDto.class,
                 columns = {

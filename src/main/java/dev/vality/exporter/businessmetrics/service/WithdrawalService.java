@@ -9,13 +9,9 @@ import io.micrometer.core.instrument.MultiGauge;
 import io.micrometer.core.instrument.Tags;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -31,9 +27,6 @@ public class WithdrawalService {
     private static final String WITHDRAWALS_STATUS_COUNT = Metric.WITHDRAWALS_STATUS_COUNT.getName();
     private static final String WITHDRAWALS_AMOUNT = Metric.WITHDRAWALS_AMOUNT.getName();
 
-    @Value("${interval.time}")
-    private String intervalTime;
-
     private final WithdrawalRepository withdrawalRepository;
     private final MultiGauge multiGaugeWithdrawalsFinalStatusCount;
     private final MultiGauge multiGaugeWithdrawalsAmount;
@@ -42,9 +35,8 @@ public class WithdrawalService {
     private final Converter<WithdrawalsAggregatedMetricDto, List<WithdrawalMetricDto>> aggregatedMetricDtoConverter;
 
     public void registerMetrics() {
-        var metrics = withdrawalRepository.getWithdrawalsFinalStatusMetricsByInterval(getStartPeriodDate());
-        log.debug("Actual withdrawal metrics have been got from 'daway' db, " +
-                "interval = {}, count = {}", intervalTime, metrics.size());
+        var metrics = withdrawalRepository.getWithdrawalsFinalStatusMetricsByInterval();
+        log.debug("Actual withdrawal metrics have been got from 'daway' db, count = {}", metrics.size());
         final var pendingCount = new LongAdder();
         final var failedCount = new LongAdder();
         final var succeededCount = new LongAdder();
@@ -81,10 +73,6 @@ public class WithdrawalService {
                 "registeredMetricsSize = {}, pendingCount = {}, failedCount = {}, succeededCount = {}, " +
                 "otherStatusCount = {}", registeredMetricsSize, pendingCount, failedCount, succeededCount,
                 otherStatusCount);
-    }
-
-    private LocalDateTime getStartPeriodDate() {
-        return LocalDateTime.now(ZoneOffset.UTC).minus(Long.parseLong(intervalTime), ChronoUnit.SECONDS);
     }
 
     private Tags getTags(WithdrawalMetricDto dto) {

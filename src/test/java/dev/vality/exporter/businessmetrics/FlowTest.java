@@ -68,13 +68,13 @@ public class FlowTest {
         var paymentsFinalStatusesMetrics = getPaymentsFinalStatusMetricDtos();
         var paymentsTransactionCountMetrics = getPaymentsTransactionCountMetricDtos();
         var withdrawalsFinalStatusesMetrics = getWithdrawalsFinalStatusMetricDtos();
-        when(paymentRepository.getPaymentsFinalStatusMetricsByInterval(any())).thenReturn(paymentsFinalStatusesMetrics);
+        when(paymentRepository.getPaymentsFinalStatusMetricsByInterval()).thenReturn(paymentsFinalStatusesMetrics);
         when(paymentRepository.getPaymentsCountMetricsByInterval(any())).thenReturn(paymentsTransactionCountMetrics);
-        when(withdrawalRepository.getWithdrawalsFinalStatusMetricsByInterval(any())).thenReturn(withdrawalsFinalStatusesMetrics);
+        when(withdrawalRepository.getWithdrawalsFinalStatusMetricsByInterval()).thenReturn(withdrawalsFinalStatusesMetrics);
         schedulerRegisterMetricsService.registerMetricsTask();
-        verify(paymentRepository, times(1)).getPaymentsFinalStatusMetricsByInterval(any());
+        verify(paymentRepository, times(1)).getPaymentsFinalStatusMetricsByInterval();
         verify(paymentRepository, times(1)).getPaymentsCountMetricsByInterval(any());
-        verify(withdrawalRepository, times(1)).getWithdrawalsFinalStatusMetricsByInterval(any());
+        verify(withdrawalRepository, times(1)).getWithdrawalsFinalStatusMetricsByInterval();
         var mvcResult = mockMvc.perform(get("/actuator/prometheus"))
                 .andReturn();
         var prometheusResponse = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);

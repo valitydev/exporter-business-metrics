@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -45,15 +44,14 @@ public class PaymentService {
     private final Converter<PaymentsAggregatedMetricDto, List<PaymentMetricDto>> aggregatedMetricDtoConverter;
 
     public void registerMetrics() {
-        var startDateTime = getStartPeriodDate();
-        processFinalStatusesAndAmount(startDateTime);
-        processTransactionCount(startDateTime);
+        processFinalStatusesAndAmount();
+        processTransactionCount(getStartPeriodDate());
     }
 
-    private void processFinalStatusesAndAmount(LocalDateTime startPeriodDate) {
-        var finalStatusMetrics = paymentRepository.getPaymentsFinalStatusMetricsByInterval(startPeriodDate);
-        log.debug("Payments with final statuses metrics have been got from 'daway' db, " +
-                "interval = {}, count = {}", intervalTime, finalStatusMetrics.size());
+    private void processFinalStatusesAndAmount() {
+        var finalStatusMetrics = paymentRepository.getPaymentsFinalStatusMetricsByInterval();
+        log.debug("Payments with final statuses metrics have been got from 'daway' db, count = {}",
+                finalStatusMetrics.size());
         final var failedCount = new LongAdder();
         final var capturedCount = new LongAdder();
         final var otherStatusCount = new LongAdder();
@@ -109,7 +107,7 @@ public class PaymentService {
     }
 
     private LocalDateTime getStartPeriodDate() {
-        return LocalDateTime.now(ZoneOffset.UTC).minus(Long.parseLong(intervalTime), ChronoUnit.SECONDS);
+        return LocalDateTime.now(ZoneOffset.UTC).minusSeconds(Long.parseLong(intervalTime));
     }
 
     private Tags getFinalStatusCountTags(PaymentMetricDto dto) {
