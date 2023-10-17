@@ -35,7 +35,7 @@ public class WithdrawalService {
     private final Converter<WithdrawalsAggregatedMetricDto, List<WithdrawalMetricDto>> aggregatedMetricDtoConverter;
 
     public void registerMetrics() {
-        var metrics = withdrawalRepository.getWithdrawalsFinalStatusMetricsByInterval();
+        var metrics = withdrawalRepository.getWithdrawalsMetrics();
         log.debug("Actual withdrawal metrics have been got from 'daway' db, count = {}", metrics.size());
         final var pendingCount = new LongAdder();
         final var failedCount = new LongAdder();

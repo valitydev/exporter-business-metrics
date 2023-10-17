@@ -49,7 +49,7 @@ public class PaymentService {
     }
 
     private void processFinalStatusesAndAmount() {
-        var finalStatusMetrics = paymentRepository.getPaymentsFinalStatusMetricsByInterval();
+        var finalStatusMetrics = paymentRepository.getPaymentsStatusMetrics();
         log.debug("Payments with final statuses metrics have been got from 'daway' db, count = {}",
                 finalStatusMetrics.size());
         final var failedCount = new LongAdder();

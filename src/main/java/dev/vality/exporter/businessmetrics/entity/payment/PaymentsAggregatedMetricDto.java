@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Data
 @NamedNativeQuery(
-        name = "getPaymentsFinalStatusMetricsByInterval",
+        name = "getPaymentsStatusMetrics",
         query = """
                 with p5 as (
                   with p4 as (
