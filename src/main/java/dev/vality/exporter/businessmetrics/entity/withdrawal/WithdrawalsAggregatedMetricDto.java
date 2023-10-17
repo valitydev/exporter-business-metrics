@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Data
 @NamedNativeQuery(
-        name = "getWithdrawalsMetricsByInterval",
+        name = "getWithdrawalsMetrics",
         query = """
                    
                  with w4 as (

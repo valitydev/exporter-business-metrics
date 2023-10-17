@@ -13,6 +13,6 @@ import java.util.List;
 @SuppressWarnings("LineLength")
 public interface WithdrawalRepository extends JpaRepository<WithdrawalEntity, WithdrawalPk> {
 
-    @Query(name = "getWithdrawalsMetricsByInterval", nativeQuery = true)
-    List<WithdrawalsAggregatedMetricDto> getWithdrawalsFinalStatusMetricsByInterval();
+    @Query(name = "getWithdrawalsMetrics", nativeQuery = true)
+    List<WithdrawalsAggregatedMetricDto> getWithdrawalsMetrics();
 }

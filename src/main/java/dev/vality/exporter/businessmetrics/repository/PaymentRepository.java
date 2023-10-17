@@ -16,8 +16,8 @@ import java.util.List;
 @SuppressWarnings("LineLength")
 public interface PaymentRepository extends JpaRepository<PaymentEntity, PaymentPk> {
 
-    @Query(name = "getPaymentsFinalStatusMetricsByInterval", nativeQuery = true)
-    List<PaymentsAggregatedMetricDto> getPaymentsFinalStatusMetricsByInterval();
+    @Query(name = "getPaymentsStatusMetrics", nativeQuery = true)
+    List<PaymentsAggregatedMetricDto> getPaymentsStatusMetrics();
 
     @Query(name = "getPaymentsCountMetricsByInterval", nativeQuery = true)
     List<PaymentsTransactionCountMetricDto> getPaymentsCountMetricsByInterval(@Param("startPeriodDate") LocalDateTime startPeriodDate);
