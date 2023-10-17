@@ -6,17 +6,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Metric {
 
-    PAYMENTS_FINAL_STATUS_COUNT(
-            formatWithPrefix("payments_final_status_count"),
-            "Payments with final statuses count since last scrape"),
+    PAYMENTS_STATUS_COUNT(
+            formatWithPrefix("payments_status_count"),
+            "Payments statuses count"),
 
     PAYMENTS_TRANSACTION_COUNT(
             formatWithPrefix("payments_transaction_count"),
             "Payments new transactions since last scrape"),
 
-    WITHDRAWALS_FINAL_STATUS_COUNT(
-            formatWithPrefix("withdrawals_final_status_count"),
-            "Withdrawals with final statuses count since last scrape"),
+    WITHDRAWALS_STATUS_COUNT(
+            formatWithPrefix("withdrawals_status_count"),
+            "Withdrawals statuses count"),
 
     PAYMENTS_AMOUNT(
             formatWithPrefix("payments_amount"),

@@ -1,21 +1,24 @@
 package dev.vality.exporter.businessmetrics.service;
 
-import dev.vality.exporter.businessmetrics.entity.payment.PaymentsMetricDto;
+import dev.vality.exporter.businessmetrics.entity.payment.PaymentsAggregatedMetricDto;
 import dev.vality.exporter.businessmetrics.entity.payment.PaymentsTransactionCountMetricDto;
 import dev.vality.exporter.businessmetrics.model.CustomTag;
 import dev.vality.exporter.businessmetrics.model.Metric;
+import dev.vality.exporter.businessmetrics.model.PaymentMetricDto;
 import dev.vality.exporter.businessmetrics.repository.PaymentRepository;
 import io.micrometer.core.instrument.MultiGauge;
 import io.micrometer.core.instrument.Tags;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 
@@ -25,7 +28,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("LineLength")
 public class PaymentService {
 
-    private static final String PAYMENTS_FINAL_STATUS_COUNT = Metric.PAYMENTS_FINAL_STATUS_COUNT.getName();
+    private static final String PAYMENTS_STATUS_COUNT = Metric.PAYMENTS_STATUS_COUNT.getName();
     private static final String PAYMENTS_TRANSACTION_COUNT = Metric.PAYMENTS_TRANSACTION_COUNT.getName();
     private static final String PAYMENTS_AMOUNT = Metric.PAYMENTS_AMOUNT.getName();
 
@@ -38,16 +41,17 @@ public class PaymentService {
     private final MultiGauge multiGaugePaymentsAmount;
     private final MeterRegistryService meterRegistryService;
 
+    private final Converter<PaymentsAggregatedMetricDto, List<PaymentMetricDto>> aggregatedMetricDtoConverter;
+
     public void registerMetrics() {
-        var startDateTime = getStartPeriodDate();
-        processFinalStatusesAndAmount(startDateTime);
-        processTransactionCount(startDateTime);
+        processFinalStatusesAndAmount();
+        processTransactionCount(getStartPeriodDate());
     }
 
-    private void processFinalStatusesAndAmount(LocalDateTime startPeriodDate) {
-        var finalStatusMetrics = paymentRepository.getPaymentsFinalStatusMetricsByInterval(startPeriodDate);
-        log.debug("Payments with final statuses metrics have been got from 'daway' db, " +
-                "interval = {}, count = {}", intervalTime, finalStatusMetrics.size());
+    private void processFinalStatusesAndAmount() {
+        var finalStatusMetrics = paymentRepository.getPaymentsFinalStatusMetricsByInterval();
+        log.debug("Payments with final statuses metrics have been got from 'daway' db, count = {}",
+                finalStatusMetrics.size());
         final var failedCount = new LongAdder();
         final var capturedCount = new LongAdder();
         final var otherStatusCount = new LongAdder();
@@ -59,11 +63,12 @@ public class PaymentService {
                         default -> otherStatusCount.increment();
                     }
                 })
+                .flatMap(dto -> Objects.requireNonNull(aggregatedMetricDtoConverter.convert(dto)).stream())
                 .flatMap(dto -> {
                     final var count = Double.parseDouble(dto.getCount());
                     final var amount = Double.parseDouble(dto.getAmount());
                     return Map.of(
-                            PAYMENTS_FINAL_STATUS_COUNT, MultiGauge.Row.of(getFinalStatusCountTags(dto), this, o -> count),
+                            PAYMENTS_STATUS_COUNT, MultiGauge.Row.of(getFinalStatusCountTags(dto), this, o -> count),
                             PAYMENTS_AMOUNT, MultiGauge.Row.of(getFinalStatusCountTags(dto), this, o -> amount)).entrySet().stream();
                 })
                 .collect(
@@ -72,9 +77,9 @@ public class PaymentService {
                                 Collectors.mapping(
                                         Map.Entry::getValue,
                                         Collectors.<MultiGauge.Row<?>>toList())));
-        multiGaugePaymentsFinalStatusCount.register(rows.get(PAYMENTS_FINAL_STATUS_COUNT), true);
+        multiGaugePaymentsFinalStatusCount.register(rows.get(PAYMENTS_STATUS_COUNT), true);
         multiGaugePaymentsAmount.register(rows.get(PAYMENTS_AMOUNT), true);
-        var registeredMetricsSize = meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_FINAL_STATUS_COUNT.getName()) + meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_AMOUNT.getName());
+        var registeredMetricsSize = meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_STATUS_COUNT.getName()) + meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_AMOUNT.getName());
         log.info("Payments with final statuses metrics have been registered to 'prometheus', " +
                 "registeredMetricsSize = {}, failedCount = {}, capturedCount = {}, otherStatusCount = {}", registeredMetricsSize, failedCount, capturedCount, otherStatusCount);
     }
@@ -102,10 +107,10 @@ public class PaymentService {
     }
 
     private LocalDateTime getStartPeriodDate() {
-        return LocalDateTime.now(ZoneOffset.UTC).minus(Long.parseLong(intervalTime), ChronoUnit.SECONDS);
+        return LocalDateTime.now(ZoneOffset.UTC).minusSeconds(Long.parseLong(intervalTime));
     }
 
-    private Tags getFinalStatusCountTags(PaymentsMetricDto dto) {
+    private Tags getFinalStatusCountTags(PaymentMetricDto dto) {
         return Tags.of(
                 CustomTag.providerId(dto.getProviderId()),
                 CustomTag.providerName(dto.getProviderName()),
@@ -114,9 +119,7 @@ public class PaymentService {
                 CustomTag.shopId(dto.getShopId()),
                 CustomTag.shopName(dto.getShopName()),
                 CustomTag.currency(dto.getCurrencyCode()),
-                CustomTag.issuerCountry(dto.getIssuerCountry()),
-                CustomTag.issuerBank(dto.getIssuerBank()),
-                CustomTag.issuerBankCardPaymentSystem(dto.getIssuerBankCardPaymentSystem()),
+                CustomTag.duration(dto.getDuration()),
                 CustomTag.status(dto.getStatus()));
     }
 

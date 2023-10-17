@@ -23,7 +23,7 @@ import javax.persistence.*;
                          from
                            dw.payment as p
                          where
-                           p.event_created_at > :startPeriodDate
+                           p.created_at > :startPeriodDate
                        )
                        select
                          p1.*,

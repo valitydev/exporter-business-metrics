@@ -11,8 +11,8 @@ public class GaugeConfig {
 
     @Bean
     public MultiGauge multiGaugePaymentsFinalStatusCount(MeterRegistry meterRegistry) {
-        return MultiGauge.builder(Metric.PAYMENTS_FINAL_STATUS_COUNT.getName())
-                .description(Metric.PAYMENTS_FINAL_STATUS_COUNT.getDescription())
+        return MultiGauge.builder(Metric.PAYMENTS_STATUS_COUNT.getName())
+                .description(Metric.PAYMENTS_STATUS_COUNT.getDescription())
                 .register(meterRegistry);
     }
 
@@ -25,8 +25,8 @@ public class GaugeConfig {
 
     @Bean
     public MultiGauge multiGaugeWithdrawalsFinalStatusCount(MeterRegistry meterRegistry) {
-        return MultiGauge.builder(Metric.WITHDRAWALS_FINAL_STATUS_COUNT.getName())
-                .description(Metric.WITHDRAWALS_FINAL_STATUS_COUNT.getDescription())
+        return MultiGauge.builder(Metric.WITHDRAWALS_STATUS_COUNT.getName())
+                .description(Metric.WITHDRAWALS_STATUS_COUNT.getDescription())
                 .register(meterRegistry);
     }
 
