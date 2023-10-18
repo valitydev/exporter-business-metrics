@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
+@Entity
 @NamedNativeQuery(
         name = "getWithdrawalsMetrics",
         query = """
@@ -104,22 +105,22 @@ import java.util.Map;
                         @ColumnResult(name = "walletName", type = String.class),
                         @ColumnResult(name = "currencyCode", type = String.class),
                         @ColumnResult(name = "status", type = String.class),
-                        @ColumnResult(name = "count5m", type = String.class),
-                        @ColumnResult(name = "amount5m", type = String.class),
-                        @ColumnResult(name = "count15m", type = String.class),
-                        @ColumnResult(name = "amount15m", type = String.class),
-                        @ColumnResult(name = "count30m", type = String.class),
-                        @ColumnResult(name = "amount30m", type = String.class),
-                        @ColumnResult(name = "count1h", type = String.class),
-                        @ColumnResult(name = "amount1h", type = String.class),
-                        @ColumnResult(name = "count3h", type = String.class),
-                        @ColumnResult(name = "amount3h", type = String.class),
-                        @ColumnResult(name = "count6h", type = String.class),
-                        @ColumnResult(name = "amount6h", type = String.class),
-                        @ColumnResult(name = "count12h", type = String.class),
-                        @ColumnResult(name = "amount12h", type = String.class),
-                        @ColumnResult(name = "count24h", type = String.class),
-                        @ColumnResult(name = "amount24h", type = String.class)}))
+                        @ColumnResult(name = "count_5m", type = String.class),
+                        @ColumnResult(name = "amount_5m", type = String.class),
+                        @ColumnResult(name = "count_15m", type = String.class),
+                        @ColumnResult(name = "amount_15m", type = String.class),
+                        @ColumnResult(name = "count_30m", type = String.class),
+                        @ColumnResult(name = "amount_30m", type = String.class),
+                        @ColumnResult(name = "count_1h", type = String.class),
+                        @ColumnResult(name = "amount_1h", type = String.class),
+                        @ColumnResult(name = "count_3h", type = String.class),
+                        @ColumnResult(name = "amount_3h", type = String.class),
+                        @ColumnResult(name = "count_6h", type = String.class),
+                        @ColumnResult(name = "amount_6h", type = String.class),
+                        @ColumnResult(name = "count_12h", type = String.class),
+                        @ColumnResult(name = "amount_12h", type = String.class),
+                        @ColumnResult(name = "count_24h", type = String.class),
+                        @ColumnResult(name = "amount_24h", type = String.class)}))
 @SuppressWarnings("LineLength")
 public class WithdrawalsAggregatedMetricDto {
 
@@ -133,8 +134,22 @@ public class WithdrawalsAggregatedMetricDto {
     private String walletName;
     private String currencyCode;
     private String status;
-    private Map<String, String> statusCounters;
-    private Map<String, String> amountCounters;
+    private String count5m;
+    private String amount5m;
+    private String count15m;
+    private String amount15m;
+    private String count30m;
+    private String amount30m;
+    private String count1h;
+    private String amount1h;
+    private String count3h;
+    private String amount3h;
+    private String count6h;
+    private String amount6h;
+    private String count12h;
+    private String amount12h;
+    private String count24h;
+    private String amount24h;
 
     public WithdrawalsAggregatedMetricDto(String providerId, String providerName, String terminalId,
                                           String terminalName, String walletId, String walletName,
@@ -155,23 +170,25 @@ public class WithdrawalsAggregatedMetricDto {
         this.walletName = walletName;
         this.currencyCode = currencyCode;
         this.status = status;
-        this.statusCounters = new HashMap<>();
-        statusCounters.put("5m", count5m);
-        statusCounters.put("15m", count15m);
-        statusCounters.put("30m", count30m);
-        statusCounters.put("1h", count1h);
-        statusCounters.put("3h", count3h);
-        statusCounters.put("6h", count6h);
-        statusCounters.put("12h", count12h);
-        statusCounters.put("24h", count24h);
-        this.amountCounters = new HashMap<>();
-        amountCounters.put("5m", amount5m);
-        amountCounters.put("15m", amount15m);
-        amountCounters.put("30m", amount30m);
-        amountCounters.put("1h", amount1h);
-        amountCounters.put("3h", amount3h);
-        amountCounters.put("6h", amount6h);
-        amountCounters.put("12h", amount12h);
-        amountCounters.put("24h", amount24h);
+        this.count5m = count5m;
+        this.amount5m = amount5m;
+        this.count15m = count15m;
+        this.amount15m = amount15m;
+        this.count30m = count30m;
+        this.amount30m = amount30m;
+        this.count1h = count1h;
+        this.amount1h = amount1h;
+        this.count3h = count3h;
+        this.amount3h = amount3h;
+        this.count6h = count6h;
+        this.amount6h = amount6h;
+        this.count12h = count12h;
+        this.amount12h = amount12h;
+        this.count24h = count24h;
+        this.amount24h = amount24h;
+    }
+
+    public WithdrawalsAggregatedMetricDto() {
+
     }
 }

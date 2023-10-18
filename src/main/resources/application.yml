@@ -30,7 +30,7 @@ management:
 
 spring:
   application:
-    name: '${project.name}'
+    name: 'hahah'
   output:
     ansi:
       enabled: always

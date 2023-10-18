@@ -16,9 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 
@@ -77,8 +75,9 @@ public class PaymentService {
                                 Collectors.mapping(
                                         Map.Entry::getValue,
                                         Collectors.<MultiGauge.Row<?>>toList())));
-        multiGaugePaymentsFinalStatusCount.register(rows.get(PAYMENTS_STATUS_COUNT), true);
-        multiGaugePaymentsAmount.register(rows.get(PAYMENTS_AMOUNT), true);
+
+        multiGaugePaymentsFinalStatusCount.register(rows.getOrDefault(PAYMENTS_STATUS_COUNT, Collections.emptyList()), true);
+        multiGaugePaymentsAmount.register(rows.getOrDefault(PAYMENTS_AMOUNT, Collections.emptyList()), true);
         var registeredMetricsSize = meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_STATUS_COUNT.getName()) + meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_AMOUNT.getName());
         log.info("Payments with final statuses metrics have been registered to 'prometheus', " +
                 "registeredMetricsSize = {}, failedCount = {}, capturedCount = {}, otherStatusCount = {}", registeredMetricsSize, failedCount, capturedCount, otherStatusCount);
@@ -100,7 +99,7 @@ public class PaymentService {
                                 Collectors.mapping(
                                         Map.Entry::getValue,
                                         Collectors.<MultiGauge.Row<?>>toList())));
-        multiGaugePaymentsTransactionCount.register(rows.get(PAYMENTS_TRANSACTION_COUNT), true);
+        multiGaugePaymentsTransactionCount.register(rows.getOrDefault(PAYMENTS_TRANSACTION_COUNT, Collections.emptyList()), true);
         var registeredMetricsSize = meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_TRANSACTION_COUNT.getName()) + meterRegistryService.getRegisteredMetricsSize(Metric.PAYMENTS_TRANSACTION_COUNT.getName());
         log.info("Payments with transaction count metrics have been registered to 'prometheus', registeredMetricsSize = {}", registeredMetricsSize);
 
