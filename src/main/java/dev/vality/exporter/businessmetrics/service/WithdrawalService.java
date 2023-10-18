@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -64,8 +65,8 @@ public class WithdrawalService {
                                 Collectors.mapping(
                                         Map.Entry::getValue,
                                         Collectors.<MultiGauge.Row<?>>toList())));
-        multiGaugeWithdrawalsFinalStatusCount.register(rows.get(WITHDRAWALS_STATUS_COUNT), true);
-        multiGaugeWithdrawalsAmount.register(rows.get(WITHDRAWALS_AMOUNT), true);
+        multiGaugeWithdrawalsFinalStatusCount.register(rows.getOrDefault(WITHDRAWALS_STATUS_COUNT, Collections.emptyList()), true);
+        multiGaugeWithdrawalsAmount.register(rows.getOrDefault(WITHDRAWALS_AMOUNT, Collections.emptyList()), true);
         var registeredMetricsSize =
                 meterRegistryService.getRegisteredMetricsSize(Metric.WITHDRAWALS_STATUS_COUNT.getName()) +
                         meterRegistryService.getRegisteredMetricsSize(Metric.WITHDRAWALS_AMOUNT.getName());
