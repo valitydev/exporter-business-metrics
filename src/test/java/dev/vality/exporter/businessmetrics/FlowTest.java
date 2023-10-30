@@ -80,20 +80,20 @@ public class FlowTest {
         var prometheusResponse = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
         var actualMetrics = Arrays.stream(prometheusResponse.split("\n"))
                 .filter(row -> row.startsWith("ebm_")).toList();
-        Assertions.assertEquals(99, actualMetrics.size());
+        Assertions.assertEquals(111, actualMetrics.size());
     }
 
     private List<PaymentsAggregatedMetricDto> getPaymentsFinalStatusMetricDtos() {
         return List.of(
                 new PaymentsAggregatedMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "pending", "1",
                         "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1",
-                        "280000000", "1", "280000000", "1", "280000000"),
+                        "280000000", "1", "280000000", "1", "280000000", "1", "280000000"),
                 new PaymentsAggregatedMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "captured", "1",
                         "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1",
-                        "280000000", "1", "280000000", "1", "280000000"),
+                        "280000000", "1", "280000000", "1", "280000000", "1", "280000000"),
                 new PaymentsAggregatedMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "failed", "1",
                         "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1",
-                        "280000000", "1", "280000000", "1", "280000000"));
+                        "280000000", "1", "280000000", "1", "280000000", "1", "280000000"));
     }
 
     private List<PaymentsTransactionCountMetricDto> getPaymentsTransactionCountMetricDtos() {
@@ -105,8 +105,14 @@ public class FlowTest {
 
     private List<WithdrawalsAggregatedMetricDto> getWithdrawalsFinalStatusMetricDtos() {
         return List.of(
-                new WithdrawalsAggregatedMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "pending", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000"),
-                new WithdrawalsAggregatedMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "succeeded", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000"),
-                new WithdrawalsAggregatedMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "failed", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000"));
+                new WithdrawalsAggregatedMetricDto("1", "mts", "1", "mts rub", "1", "gucci", "rub", "pending", "1",
+                        "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1",
+                        "280000000", "1", "280000000", "1", "280000000", "1", "280000000"),
+                new WithdrawalsAggregatedMetricDto("2", "xxx", "2", "xxx usd", "1", "kaspi", "kzt", "succeeded", "1",
+                        "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1",
+                        "280000000", "1", "280000000", "1", "280000000", "1", "280000000"),
+                new WithdrawalsAggregatedMetricDto("3", "reppay", "3", "reppay kzt", "1", "kaspi", "usd", "failed",
+                        "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1", "280000000", "1",
+                        "280000000", "1", "280000000", "1", "280000000", "1", "280000000"));
     }
 }

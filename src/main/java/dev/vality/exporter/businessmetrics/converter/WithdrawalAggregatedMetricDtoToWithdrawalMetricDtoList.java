@@ -31,6 +31,8 @@ public class WithdrawalAggregatedMetricDtoToWithdrawalMetricDtoList implements C
                 WithdrawalsAggregatedMetricDto::getAmount12h));
         result.add(createWithdrawalMetricDto(source, "24h", WithdrawalsAggregatedMetricDto::getCount24h,
                 WithdrawalsAggregatedMetricDto::getAmount24h));
+        result.add(createWithdrawalMetricDto(source, "today_msk", WithdrawalsAggregatedMetricDto::getCountTodayMsk,
+                WithdrawalsAggregatedMetricDto::getAmountTodayMsk));
         return result;
     }
 

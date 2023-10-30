@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 public class PaymentAggregatedMetricDtoToPaymentMetricDtoList implements Converter<PaymentsAggregatedMetricDto,
@@ -32,6 +31,8 @@ public class PaymentAggregatedMetricDtoToPaymentMetricDtoList implements Convert
                 PaymentsAggregatedMetricDto::getAmount12h));
         result.add(createPaymentMetricDto(source, "24h", PaymentsAggregatedMetricDto::getCount24h,
                 PaymentsAggregatedMetricDto::getAmount24h));
+        result.add(createPaymentMetricDto(source, "today_msk", PaymentsAggregatedMetricDto::getCountTodayMsk,
+                PaymentsAggregatedMetricDto::getAmountTodayMsk));
         return result;
     }
 
