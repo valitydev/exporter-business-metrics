@@ -3,8 +3,6 @@ package dev.vality.exporter.businessmetrics.entity.payment;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.HashMap;
-import java.util.Map;
 
 @Data
 @Entity
@@ -92,7 +90,9 @@ import java.util.Map;
                   count(case when created_at > now() - interval '12 hour' then 1 end) as count_12h,
                   coalesce(sum(case when created_at > now() - interval '12 hour' then amount end), 0) as amount_12h,
                   count(status) as count_24h,
-                  sum(amount) as amount_24h
+                  sum(amount) as amount_24h,
+                  count(case when created_at > current_date at time zone 'Europe/Moscow' then 1 end) as count_today_msk,
+                  coalesce(sum(case when created_at > current_date at time zone 'Europe/Moscow' then amount end), 0) as amount_today_msk
                 from
                   p5
                 group by
@@ -134,7 +134,9 @@ import java.util.Map;
                         @ColumnResult(name = "count_12h", type = String.class),
                         @ColumnResult(name = "amount_12h", type = String.class),
                         @ColumnResult(name = "count_24h", type = String.class),
-                        @ColumnResult(name = "amount_24h", type = String.class),}))
+                        @ColumnResult(name = "amount_24h", type = String.class),
+                        @ColumnResult(name = "count_today_msk", type = String.class),
+                        @ColumnResult(name = "amount_today_msk", type = String.class),}))
 @SuppressWarnings("LineLength")
 public class PaymentsAggregatedMetricDto {
 
@@ -164,6 +166,8 @@ public class PaymentsAggregatedMetricDto {
     private String amount12h;
     private String count24h;
     private String amount24h;
+    private String countTodayMsk;
+    private String amountTodayMsk;
 
     public PaymentsAggregatedMetricDto(String providerId, String providerName, String terminalId, String terminalName, String shopId, String shopName, String currencyCode, String status,
                                        String count5m, String amount5m,
@@ -173,7 +177,8 @@ public class PaymentsAggregatedMetricDto {
                                        String count3h, String amount3h,
                                        String count6h, String amount6h,
                                        String count12h, String amount12h,
-                                       String count24h, String amount24h) {
+                                       String count24h, String amount24h,
+                                       String countTodayMsk, String amountTodayMsk) {
         this.providerId = providerId;
         this.providerName = providerName;
         this.terminalId = terminalId;
@@ -198,6 +203,8 @@ public class PaymentsAggregatedMetricDto {
         this.amount12h = amount12h;
         this.count24h = count24h;
         this.amount24h = amount24h;
+        this.countTodayMsk = countTodayMsk;
+        this.amountTodayMsk = amountTodayMsk;
     }
 
     public PaymentsAggregatedMetricDto() {
