@@ -43,4 +43,11 @@ public class GaugeConfig {
                 .description(Metric.WITHDRAWALS_AMOUNT.getDescription())
                 .register(meterRegistry);
     }
+
+    @Bean
+    public MultiGauge multiGaugeCurrencyExponent(MeterRegistry meterRegistry) {
+        return MultiGauge.builder(Metric.CURRENCY_EXPONENT.getName())
+                .description(Metric.CURRENCY_EXPONENT.getDescription())
+                .register(meterRegistry);
+    }
 }

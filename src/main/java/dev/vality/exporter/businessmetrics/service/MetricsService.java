@@ -11,9 +11,11 @@ public class MetricsService {
 
     private final PaymentService paymentService;
     private final WithdrawalService withdrawalService;
+    private final CurrencyService currencyService;
 
     public void registerMetrics() {
         paymentService.registerMetrics();
         withdrawalService.registerMetrics();
+        currencyService.registerMetrics();
     }
 }
