@@ -24,7 +24,11 @@ public enum Metric {
 
     WITHDRAWALS_AMOUNT(
             formatWithPrefix("withdrawals_amount"),
-            "Withdrawals amount since last scrape");
+            "Withdrawals amount since last scrape"),
+
+    CURRENCY_EXPONENT(
+            formatWithPrefix("currency_exponent"),
+            "Currency exponent");
 
     @Getter
     private final String name;

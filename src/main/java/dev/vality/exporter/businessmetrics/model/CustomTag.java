@@ -17,6 +17,8 @@ public class CustomTag {
     public static final String WALLET_ID_TAG = "wallet_id";
     public static final String WALLET_NAME_TAG = "wallet_name";
     public static final String DURATION_TAG = "duration";
+    public static final String NUMERIC_CODE = "numeric_code";
+    public static final String SYMBOLIC_CODE = "symbolic_code";
 
     public static Tag providerId(String providerId) {
         return Tag.of(PROVIDER_ID_TAG, providerId);
@@ -60,5 +62,13 @@ public class CustomTag {
 
     public static Tag duration(String duration) {
         return Tag.of(DURATION_TAG, duration);
+    }
+
+    public static Tag numericCode(String numericCode) {
+        return Tag.of(NUMERIC_CODE, numericCode);
+    }
+
+    public static Tag symbolicCode(String symbolicCode) {
+        return Tag.of(SYMBOLIC_CODE, symbolicCode);
     }
 }

@@ -3,6 +3,7 @@ package dev.vality.exporter.businessmetrics;
 import dev.vality.exporter.businessmetrics.entity.payment.PaymentsAggregatedMetricDto;
 import dev.vality.exporter.businessmetrics.entity.payment.PaymentsTransactionCountMetricDto;
 import dev.vality.exporter.businessmetrics.entity.withdrawal.WithdrawalsAggregatedMetricDto;
+import dev.vality.exporter.businessmetrics.repository.CurrencyRepository;
 import dev.vality.exporter.businessmetrics.repository.PaymentRepository;
 import dev.vality.exporter.businessmetrics.repository.WithdrawalRepository;
 import dev.vality.exporter.businessmetrics.service.SchedulerRegisterMetricsService;
@@ -40,6 +41,9 @@ public class FlowTest {
 
     @MockBean
     private WithdrawalRepository withdrawalRepository;
+
+    @MockBean
+    private CurrencyRepository currencyRepository;
 
     @Autowired
     private MockMvc mockMvc;
