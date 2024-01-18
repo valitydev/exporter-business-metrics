@@ -27,7 +27,7 @@ public enum Metric {
             "Withdrawals amount since last scrape"),
 
     CURRENCY_EXPONENT(
-            formatWithPrefix("currency exponent"),
+            formatWithPrefix("currency_exponent"),
             "Currency exponent");
 
     @Getter
